@@ -6,7 +6,7 @@ import { Canvas2D } from "@/components/editor/Canvas2D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
 import {
   ArrowRight, Save, Download, Undo2, Redo2, Box, Square,
-  Search, Sparkles, Grid3x3, Sofa,
+  Search, Sparkles, Grid3x3, Sofa, Image,
 } from "lucide-react";
 
 const searchSchema = z.object({
@@ -82,6 +82,16 @@ function Editor() {
   const [cat, setCat] = useState<FurnitureCategory | "all">("all");
   const [query, setQuery] = useState("");
   const [saved, setSaved] = useState(false);
+  const [bgUrl, setBgUrl] = useState<string | null>(null);
+  const [showBg, setShowBg] = useState(true);
+
+  // Load AI-generated design from previous step
+  useEffect(() => {
+    try {
+      const url = sessionStorage.getItem("dari:lastDesign");
+      if (url) setBgUrl(url);
+    } catch {}
+  }, []);
 
   const filtered = useMemo(
     () => FURNITURE.filter((f) =>
@@ -170,6 +180,16 @@ function Editor() {
               <Redo2 className="size-4" />
             </button>
             <div className="w-px h-6 bg-border mx-1" />
+            {bgUrl && (
+              <button
+                onClick={() => setShowBg((v) => !v)}
+                className={`size-9 rounded-lg grid place-items-center ${showBg ? "bg-gold/20 text-gold-foreground" : "hover:bg-secondary"}`}
+                aria-label="إظهار التصميم"
+                title="إظهار/إخفاء صورة التصميم المولّد"
+              >
+                <Image className="size-4" />
+              </button>
+            )}
             <Button variant="ghost" size="sm">
               <Download className="size-4" /> تصدير
             </Button>
@@ -243,13 +263,23 @@ function Editor() {
         {/* Canvas area */}
         <main className="flex-1 p-4 min-w-0 relative">
           {mode === "2d" ? (
-            <Canvas2D
-              items={items}
-              setItems={setItems}
-              selected={selected}
-              setSelected={setSelected}
-              onDropItem={onDropItem}
-            />
+            <div className="relative h-full w-full">
+              {bgUrl && showBg && (
+                <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">
+                  <img src={bgUrl} alt="تصميم AI" className="size-full object-cover opacity-60" />
+                  <div className="absolute inset-0 bg-card/30" />
+                </div>
+              )}
+              <div className="relative h-full w-full z-10">
+                <Canvas2D
+                  items={items}
+                  setItems={setItems}
+                  selected={selected}
+                  setSelected={setSelected}
+                  onDropItem={onDropItem}
+                />
+              </div>
+            </div>
           ) : (
             <div className="h-full w-full rounded-2xl border border-border bg-gradient-hero grid place-items-center relative overflow-hidden">
               <div className="absolute inset-0 opacity-20" style={{

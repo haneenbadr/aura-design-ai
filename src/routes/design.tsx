@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
+import { generateDesign } from "@/lib/generate-design.functions";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
-  Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check,
+  Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/design")({
@@ -55,6 +57,9 @@ function DesignWizard() {
   const [chips, setChips] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
   const [done, setDone] = useState(false);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const generate = useServerFn(generateDesign);
 
   const canNext =
     (step === 0 && room) ||
@@ -63,10 +68,20 @@ function DesignWizard() {
     (step === 3) ||
     step === 4;
 
-  const next = () => {
+  const next = async () => {
     if (step === 4) {
       setGenerating(true);
-      setTimeout(() => { setGenerating(false); setDone(true); }, 2400);
+      setError(null);
+      const res = await generate({ data: { room, style, prompt, chips } });
+      setGenerating(false);
+      if (res.error || !res.imageUrl) {
+        setError(res.error ?? "تعذّر التوليد");
+        return;
+      }
+      // Persist for the editor to pick up
+      try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+      setResultUrl(res.imageUrl);
+      setDone(true);
       return;
     }
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -264,26 +279,43 @@ function DesignWizard() {
                       <Loader2 className="absolute inset-0 m-auto size-10 text-gold-foreground animate-spin" />
                     </div>
                     <p className="font-bold text-lg">الذكاء الاصطناعي يصمم غرفتك...</p>
-                    <p className="text-sm text-muted-foreground mt-1">يحلل المساحة، يختار الخامات، ويرتّب الأثاث</p>
+                    <p className="text-sm text-muted-foreground mt-1">قد يستغرق ذلك حتى دقيقة</p>
+                  </div>
+                )}
+
+                {error && !generating && (
+                  <div className="rounded-2xl bg-destructive/10 border border-destructive/30 p-5 flex items-start gap-3 animate-fade-in">
+                    <AlertCircle className="size-5 text-destructive shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-destructive">{error}</p>
+                      <p className="text-sm text-muted-foreground mt-1">يمكنك إعادة المحاولة من زر "ولّد التصميم"</p>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
             {step === 4 && done && (
-              <div className="animate-fade-up text-center py-6">
-                <div className="size-20 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-5">
-                  <Check className="size-9 text-gold-foreground" />
+              <div className="animate-fade-up text-center py-2">
+                <div className="size-14 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-4">
+                  <Check className="size-7 text-gold-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold mb-2">تصميمك جاهز!</h2>
-                <p className="text-muted-foreground mb-8">تابع إلى المحرر لاستكشاف التصميم وتعديله</p>
+                <p className="text-muted-foreground mb-6">إليك التصميم الذي ولّده الذكاء الاصطناعي</p>
+
+                {resultUrl && (
+                  <div className="rounded-2xl overflow-hidden shadow-elegant border border-border/60 mb-6 max-w-2xl mx-auto">
+                    <img src={resultUrl} alt="تصميم غرفتك" className="w-full h-auto" />
+                  </div>
+                )}
+
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Button variant="hero" size="lg" asChild>
                     <Link to="/editor" search={{ room, style }}>
                       افتح في المحرر <ArrowLeft className="size-4" />
                     </Link>
                   </Button>
-                  <Button variant="glass" size="lg" onClick={() => { setStep(0); setDone(false); }}>
+                  <Button variant="glass" size="lg" onClick={() => { setStep(0); setDone(false); setResultUrl(null); }}>
                     تصميم آخر
                   </Button>
                 </div>
