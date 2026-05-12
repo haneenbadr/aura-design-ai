@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useRef, useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Canvas2D } from "@/components/editor/Canvas2D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
+import { AIChat } from "@/components/design/AIChat";
+import { generateDesign } from "@/lib/generate-design.functions";
 import {
   ArrowRight, Save, Download, Undo2, Redo2, Box, Square,
   Search, Sparkles, Grid3x3, Sofa, Image,
@@ -84,6 +87,8 @@ function Editor() {
   const [saved, setSaved] = useState(false);
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [showBg, setShowBg] = useState(true);
+  const [regenerating, setRegenerating] = useState(false);
+  const generate = useServerFn(generateDesign);
 
   // Load AI-generated design from previous step
   useEffect(() => {
@@ -299,6 +304,24 @@ function Editor() {
           )}
         </main>
       </div>
+
+      <AIChat
+        context={{ room, style, hasImage: !!bgUrl }}
+        applying={regenerating}
+        onApplyEdit={async (extra) => {
+          setRegenerating(true);
+          try {
+            const res = await generate({ data: { room: room ?? "", style: style ?? "", prompt: extra, chips: [] } });
+            if (res.imageUrl) {
+              setBgUrl(res.imageUrl);
+              setShowBg(true);
+              try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+            }
+          } finally {
+            setRegenerating(false);
+          }
+        }}
+      />
     </div>
   );
 }

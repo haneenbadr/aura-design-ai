@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
 import { generateDesign } from "@/lib/generate-design.functions";
-import { AIChat } from "@/components/design/AIChat";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
   Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
@@ -382,11 +381,6 @@ function DesignWizard() {
           </div>
         </div>
       </main>
-      <AIChat
-        context={{ room, style, prompt, chips, hasImage: !!resultUrl }}
-        onApplyEdit={applyEdit}
-        applying={generating}
-      />
       <SiteFooter />
     </div>
   );
