@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
+import { generateDesign } from "@/lib/generate-design.functions";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
-  Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check,
+  Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/design")({
@@ -55,6 +57,9 @@ function DesignWizard() {
   const [chips, setChips] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
   const [done, setDone] = useState(false);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const generate = useServerFn(generateDesign);
 
   const canNext =
     (step === 0 && room) ||
@@ -63,10 +68,20 @@ function DesignWizard() {
     (step === 3) ||
     step === 4;
 
-  const next = () => {
+  const next = async () => {
     if (step === 4) {
       setGenerating(true);
-      setTimeout(() => { setGenerating(false); setDone(true); }, 2400);
+      setError(null);
+      const res = await generate({ data: { room, style, prompt, chips } });
+      setGenerating(false);
+      if (res.error || !res.imageUrl) {
+        setError(res.error ?? "تعذّر التوليد");
+        return;
+      }
+      // Persist for the editor to pick up
+      try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+      setResultUrl(res.imageUrl);
+      setDone(true);
       return;
     }
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
