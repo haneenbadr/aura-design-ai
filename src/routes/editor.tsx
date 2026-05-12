@@ -87,6 +87,8 @@ function Editor() {
   const [saved, setSaved] = useState(false);
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [showBg, setShowBg] = useState(true);
+  const [regenerating, setRegenerating] = useState(false);
+  const generate = useServerFn(generateDesign);
 
   // Load AI-generated design from previous step
   useEffect(() => {
