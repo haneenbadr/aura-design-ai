@@ -304,6 +304,24 @@ function Editor() {
           )}
         </main>
       </div>
+
+      <AIChat
+        context={{ room, style, hasImage: !!bgUrl }}
+        applying={regenerating}
+        onApplyEdit={async (extra) => {
+          setRegenerating(true);
+          try {
+            const res = await generate({ data: { room: room ?? "", style: style ?? "", prompt: extra, chips: [] } });
+            if (res.imageUrl) {
+              setBgUrl(res.imageUrl);
+              setShowBg(true);
+              try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+            }
+          } finally {
+            setRegenerating(false);
+          }
+        }}
+      />
     </div>
   );
 }
