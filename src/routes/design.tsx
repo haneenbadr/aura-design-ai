@@ -279,7 +279,9 @@ function DesignWizard() {
                 <p className="text-muted-foreground mb-8">تابع إلى المحرر لاستكشاف التصميم وتعديله</p>
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Button variant="hero" size="lg" asChild>
-                    <Link to="/editor">افتح في المحرر <ArrowLeft className="size-4" /></Link>
+                    <Link to="/editor" search={{ room, style }}>
+                      افتح في المحرر <ArrowLeft className="size-4" />
+                    </Link>
                   </Button>
                   <Button variant="glass" size="lg" onClick={() => { setStep(0); setDone(false); }}>
                     تصميم آخر
