@@ -263,13 +263,23 @@ function Editor() {
         {/* Canvas area */}
         <main className="flex-1 p-4 min-w-0 relative">
           {mode === "2d" ? (
-            <Canvas2D
-              items={items}
-              setItems={setItems}
-              selected={selected}
-              setSelected={setSelected}
-              onDropItem={onDropItem}
-            />
+            <div className="relative h-full w-full">
+              {bgUrl && showBg && (
+                <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">
+                  <img src={bgUrl} alt="تصميم AI" className="size-full object-cover opacity-60" />
+                  <div className="absolute inset-0 bg-card/30" />
+                </div>
+              )}
+              <div className="relative h-full w-full z-10">
+                <Canvas2D
+                  items={items}
+                  setItems={setItems}
+                  selected={selected}
+                  setSelected={setSelected}
+                  onDropItem={onDropItem}
+                />
+              </div>
+            </div>
           ) : (
             <div className="h-full w-full rounded-2xl border border-border bg-gradient-hero grid place-items-center relative overflow-hidden">
               <div className="absolute inset-0 opacity-20" style={{
