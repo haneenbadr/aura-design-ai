@@ -89,6 +89,23 @@ function DesignWizard() {
   };
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
+  const applyEdit = async (extra: string) => {
+    setGenerating(true);
+    setError(null);
+    const mergedPrompt = [prompt, extra].filter(Boolean).join(". ");
+    const res = await generate({ data: { room, style, prompt: mergedPrompt, chips } });
+    setGenerating(false);
+    if (res.error || !res.imageUrl) {
+      setError(res.error ?? "تعذّر التوليد");
+      return;
+    }
+    try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+    setResultUrl(res.imageUrl);
+    setDone(true);
+    setStep(4);
+    setPrompt(mergedPrompt);
+  };
+
   const toggleChip = (c: string) =>
     setChips((arr) => arr.includes(c) ? arr.filter((x) => x !== c) : [...arr, c]);
 
