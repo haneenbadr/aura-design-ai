@@ -6,7 +6,7 @@ import { Canvas2D } from "@/components/editor/Canvas2D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
 import {
   ArrowRight, Save, Download, Undo2, Redo2, Box, Square,
-  Search, Sparkles, Grid3x3, Sofa,
+  Search, Sparkles, Grid3x3, Sofa, Image,
 } from "lucide-react";
 
 const searchSchema = z.object({
@@ -180,6 +180,16 @@ function Editor() {
               <Redo2 className="size-4" />
             </button>
             <div className="w-px h-6 bg-border mx-1" />
+            {bgUrl && (
+              <button
+                onClick={() => setShowBg((v) => !v)}
+                className={`size-9 rounded-lg grid place-items-center ${showBg ? "bg-gold/20 text-gold-foreground" : "hover:bg-secondary"}`}
+                aria-label="إظهار التصميم"
+                title="إظهار/إخفاء صورة التصميم المولّد"
+              >
+                <Image className="size-4" />
+              </button>
+            )}
             <Button variant="ghost" size="sm">
               <Download className="size-4" /> تصدير
             </Button>
