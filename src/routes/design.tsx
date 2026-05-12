@@ -381,11 +381,6 @@ function DesignWizard() {
           </div>
         </div>
       </main>
-      <AIChat
-        context={{ room, style, prompt, chips, hasImage: !!resultUrl }}
-        onApplyEdit={applyEdit}
-        applying={generating}
-      />
       <SiteFooter />
     </div>
   );
