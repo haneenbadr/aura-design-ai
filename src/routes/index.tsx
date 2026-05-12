@@ -1,26 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Hero } from "@/components/landing/Hero";
+import { Inspiration } from "@/components/landing/Inspiration";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { Features } from "@/components/landing/Features";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { CTA } from "@/components/landing/CTA";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "داري — صمم غرفتك بالذكاء الاصطناعي" },
+      { name: "description", content: "منصة ذكية لتصميم الغرف بالذكاء الاصطناعي وربطك بالموردين المناسبين. تصاميم ثنائية وثلاثية الأبعاد في دقائق." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
+      <main>
+        <Hero />
+        <Inspiration />
+        <HowItWorks />
+        <Features />
+        <Testimonials />
+        <CTA />
+      </main>
+      <SiteFooter />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
