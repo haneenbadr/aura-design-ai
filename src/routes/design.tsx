@@ -279,26 +279,43 @@ function DesignWizard() {
                       <Loader2 className="absolute inset-0 m-auto size-10 text-gold-foreground animate-spin" />
                     </div>
                     <p className="font-bold text-lg">الذكاء الاصطناعي يصمم غرفتك...</p>
-                    <p className="text-sm text-muted-foreground mt-1">يحلل المساحة، يختار الخامات، ويرتّب الأثاث</p>
+                    <p className="text-sm text-muted-foreground mt-1">قد يستغرق ذلك حتى دقيقة</p>
+                  </div>
+                )}
+
+                {error && !generating && (
+                  <div className="rounded-2xl bg-destructive/10 border border-destructive/30 p-5 flex items-start gap-3 animate-fade-in">
+                    <AlertCircle className="size-5 text-destructive shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-destructive">{error}</p>
+                      <p className="text-sm text-muted-foreground mt-1">يمكنك إعادة المحاولة من زر "ولّد التصميم"</p>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
             {step === 4 && done && (
-              <div className="animate-fade-up text-center py-6">
-                <div className="size-20 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-5">
-                  <Check className="size-9 text-gold-foreground" />
+              <div className="animate-fade-up text-center py-2">
+                <div className="size-14 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-4">
+                  <Check className="size-7 text-gold-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold mb-2">تصميمك جاهز!</h2>
-                <p className="text-muted-foreground mb-8">تابع إلى المحرر لاستكشاف التصميم وتعديله</p>
+                <p className="text-muted-foreground mb-6">إليك التصميم الذي ولّده الذكاء الاصطناعي</p>
+
+                {resultUrl && (
+                  <div className="rounded-2xl overflow-hidden shadow-elegant border border-border/60 mb-6 max-w-2xl mx-auto">
+                    <img src={resultUrl} alt="تصميم غرفتك" className="w-full h-auto" />
+                  </div>
+                )}
+
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Button variant="hero" size="lg" asChild>
                     <Link to="/editor" search={{ room, style }}>
                       افتح في المحرر <ArrowLeft className="size-4" />
                     </Link>
                   </Button>
-                  <Button variant="glass" size="lg" onClick={() => { setStep(0); setDone(false); }}>
+                  <Button variant="glass" size="lg" onClick={() => { setStep(0); setDone(false); setResultUrl(null); }}>
                     تصميم آخر
                   </Button>
                 </div>
