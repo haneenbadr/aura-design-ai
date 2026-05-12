@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
 import { generateDesign } from "@/lib/generate-design.functions";
+import { AIChat } from "@/components/design/AIChat";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
   Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
@@ -87,6 +88,23 @@ function DesignWizard() {
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   };
   const back = () => setStep((s) => Math.max(s - 1, 0));
+
+  const applyEdit = async (extra: string) => {
+    setGenerating(true);
+    setError(null);
+    const mergedPrompt = [prompt, extra].filter(Boolean).join(". ");
+    const res = await generate({ data: { room, style, prompt: mergedPrompt, chips } });
+    setGenerating(false);
+    if (res.error || !res.imageUrl) {
+      setError(res.error ?? "تعذّر التوليد");
+      return;
+    }
+    try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
+    setResultUrl(res.imageUrl);
+    setDone(true);
+    setStep(4);
+    setPrompt(mergedPrompt);
+  };
 
   const toggleChip = (c: string) =>
     setChips((arr) => arr.includes(c) ? arr.filter((x) => x !== c) : [...arr, c]);
@@ -364,6 +382,11 @@ function DesignWizard() {
           </div>
         </div>
       </main>
+      <AIChat
+        context={{ room, style, prompt, chips, hasImage: !!resultUrl }}
+        onApplyEdit={applyEdit}
+        applying={generating}
+      />
       <SiteFooter />
     </div>
   );
