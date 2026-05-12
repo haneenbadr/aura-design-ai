@@ -1,22 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { Construction } from "lucide-react";
 
-export function makePlaceholderRoute(path: string, title: string, desc: string) {
-  return {
-    head: () => ({
-      meta: [
-        { title: `${title} — داري` },
-        { name: "description", content: desc },
-      ],
-    }),
-    component: () => <Placeholder title={title} desc={desc} />,
-  };
-}
-
-function Placeholder({ title, desc }: { title: string; desc: string }) {
+export function Placeholder({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <SiteHeader />
@@ -28,7 +16,7 @@ function Placeholder({ title, desc }: { title: string; desc: string }) {
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{title}</h1>
           <p className="text-muted-foreground leading-relaxed mb-8">{desc}</p>
           <p className="text-sm text-muted-foreground mb-6">
-            هذه الصفحة قيد التطوير. اطلب من المساعد بناء تجربة هذه الصفحة بالكامل في الخطوة التالية.
+            هذه الصفحة قيد التطوير. اطلب من المساعد بناء تجربتها الكاملة في الخطوة التالية.
           </p>
           <Button variant="hero" size="lg" asChild>
             <Link to="/">العودة للرئيسية</Link>
@@ -39,8 +27,3 @@ function Placeholder({ title, desc }: { title: string; desc: string }) {
     </div>
   );
 }
-
-// Re-export for routes — used by route files via createFileRoute
-export const Route = createFileRoute("/_placeholder-base" as never)({
-  component: () => null,
-});
