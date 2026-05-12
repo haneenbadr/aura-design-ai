@@ -82,6 +82,16 @@ function Editor() {
   const [cat, setCat] = useState<FurnitureCategory | "all">("all");
   const [query, setQuery] = useState("");
   const [saved, setSaved] = useState(false);
+  const [bgUrl, setBgUrl] = useState<string | null>(null);
+  const [showBg, setShowBg] = useState(true);
+
+  // Load AI-generated design from previous step
+  useEffect(() => {
+    try {
+      const url = sessionStorage.getItem("dari:lastDesign");
+      if (url) setBgUrl(url);
+    } catch {}
+  }, []);
 
   const filtered = useMemo(
     () => FURNITURE.filter((f) =>
