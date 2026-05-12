@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useRef, useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Canvas2D } from "@/components/editor/Canvas2D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
+import { AIChat } from "@/components/design/AIChat";
+import { generateDesign } from "@/lib/generate-design.functions";
 import {
   ArrowRight, Save, Download, Undo2, Redo2, Box, Square,
   Search, Sparkles, Grid3x3, Sofa, Image,
