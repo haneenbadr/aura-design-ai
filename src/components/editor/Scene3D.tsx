@@ -203,7 +203,6 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
         gl.setSize(size.x, size.y, false);
         gl.render(scene, camera);
       }
-    },
     exportGLB: async () => {
       const api = sceneApi.current;
       if (!api) return;
