@@ -275,6 +275,7 @@ function Editor() {
             <p>اضغط القطعة للتدوير أو الحذف</p>
           </div>
         </aside>
+        )}
 
         {/* Canvas area */}
         <main className="flex-1 p-4 min-w-0 relative">
