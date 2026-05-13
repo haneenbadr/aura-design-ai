@@ -1,8 +1,8 @@
 import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, Environment, ContactShadows, Html } from "@react-three/drei";
-import { Suspense, forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import { OrbitControls, Environment, ContactShadows, Html, TransformControls } from "@react-three/drei";
+import { Suspense, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
-import { Vector2, type Scene, type WebGLRenderer, type PerspectiveCamera } from "three";
+import { Vector2, type Group, type Scene, type WebGLRenderer, type PerspectiveCamera } from "three";
 import { FURNITURE, type PlacedItem } from "./furniture";
 
 export interface Scene3DHandle {
@@ -10,8 +10,11 @@ export interface Scene3DHandle {
   exportGLB: () => Promise<void>;
 }
 
+type TransformMode = "translate" | "rotate";
+
 interface Props {
   items: PlacedItem[];
+  setItems?: (next: PlacedItem[]) => void;
   selected: string | null;
   setSelected: (id: string | null) => void;
   /** Canvas pixel size used in 2D — used to size the room. */
