@@ -3,6 +3,7 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Canvas2D } from "@/components/editor/Canvas2D";
+import { Scene3D } from "@/components/editor/Scene3D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
 import { AIChat } from "@/components/design/AIChat";
 import {
