@@ -2,7 +2,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Environment, ContactShadows, Html } from "@react-three/drei";
 import { Suspense, forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
-import type { Scene, WebGLRenderer, PerspectiveCamera } from "three";
+import { Vector2, type Scene, type WebGLRenderer, type PerspectiveCamera } from "three";
 import { FURNITURE, type PlacedItem } from "./furniture";
 
 export interface Scene3DHandle {
