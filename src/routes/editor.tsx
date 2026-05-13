@@ -167,32 +167,26 @@ function Editor() {
           </div>
 
           <div className="flex items-center gap-1">
-            <button
-              onClick={undo}
-              className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
-              aria-label="تراجع"
-              title="تراجع (Ctrl+Z)"
-            >
-              <Undo2 className="size-4" />
-            </button>
-            <button
-              onClick={redo}
-              className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
-              aria-label="إعادة"
-              title="إعادة (Ctrl+Y)"
-            >
-              <Redo2 className="size-4" />
-            </button>
-            <div className="w-px h-6 bg-border mx-1" />
-            {bgUrl && (
-              <button
-                onClick={() => setShowBg((v) => !v)}
-                className={`size-9 rounded-lg grid place-items-center ${showBg ? "bg-gold/20 text-gold-foreground" : "hover:bg-secondary"}`}
-                aria-label="إظهار التصميم"
-                title="إظهار/إخفاء صورة التصميم المولّد"
-              >
-                <Image className="size-4" />
-              </button>
+            {mode === "3d" && (
+              <>
+                <button
+                  onClick={undo}
+                  className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
+                  aria-label="تراجع"
+                  title="تراجع (Ctrl+Z)"
+                >
+                  <Undo2 className="size-4" />
+                </button>
+                <button
+                  onClick={redo}
+                  className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
+                  aria-label="إعادة"
+                  title="إعادة (Ctrl+Y)"
+                >
+                  <Redo2 className="size-4" />
+                </button>
+                <div className="w-px h-6 bg-border mx-1" />
+              </>
             )}
             {mode === "3d" ? (
               <>
