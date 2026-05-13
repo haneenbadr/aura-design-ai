@@ -204,10 +204,10 @@ function VendorPage() {
             </TabsList>
 
             {/* Overview */}
-            <TabsContent value="overview" className="mt-6 space-y-6">
+            <TabsContent value="overview" className="mt-6 space-y-6 text-right">
               <div className="grid lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2 border-border/60">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 text-right">
                     <div className="flex items-center justify-between mb-5">
                       <div>
                         <h2 className="font-extrabold text-lg">أعلى المنتجات تطابقاً</h2>
@@ -224,7 +224,7 @@ function VendorPage() {
                             <p className="font-semibold text-sm truncate">{p.title}</p>
                             <p className="text-xs text-muted-foreground">{p.category} · {p.style}</p>
                           </div>
-                          <div className="text-left shrink-0">
+                          <div className="text-right shrink-0">
                             <p className="text-sm font-bold text-accent">{p.matches}</p>
                             <p className="text-[10px] text-muted-foreground">مطابقة</p>
                           </div>
@@ -235,7 +235,7 @@ function VendorPage() {
                 </Card>
 
                 <Card className="border-border/60">
-                  <CardContent className="p-6 space-y-4">
+                  <CardContent className="p-6 space-y-4 text-right">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="size-5 text-accent" />
                       <h2 className="font-extrabold text-lg">الملف العام</h2>
@@ -311,7 +311,7 @@ function VendorPage() {
             <TabsContent value="contact" className="mt-6">
               <div className="grid lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2 border-border/60">
-                  <CardContent className="p-6 sm:p-8">
+                  <CardContent className="p-6 sm:p-8 text-right">
                     <div className="mb-6">
                       <h2 className="font-extrabold text-xl">بيانات التواصل العامة</h2>
                       <p className="text-sm text-muted-foreground">
@@ -361,11 +361,11 @@ function VendorPage() {
                 </Card>
 
                 <Card className="border-border/60 h-fit">
-                  <CardContent className="p-6 space-y-4">
+                  <CardContent className="p-6 space-y-4 text-right">
                     <h3 className="font-extrabold">معاينة بطاقة المتجر</h3>
                     <p className="text-xs text-muted-foreground">هكذا يراها العميل في صفحة المنتج.</p>
                     <div className="rounded-2xl border border-border/60 p-4 space-y-3 bg-secondary/30">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 text-right">
                         <div className="size-12 rounded-xl bg-gradient-wood grid place-items-center text-primary-foreground font-bold text-lg">
                           {profile.storeName.charAt(0)}
                         </div>
@@ -377,11 +377,11 @@ function VendorPage() {
                         </div>
                       </div>
                       <p className="text-xs text-foreground/80 leading-relaxed">{profile.bio}</p>
-                      <div className="space-y-1.5 text-xs">
-                        <p className="flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground" />{profile.address}</p>
-                        <p className="flex items-center gap-2" dir="ltr"><Phone className="size-3.5 text-muted-foreground" />{profile.phone}</p>
+                      <div className="space-y-1.5 text-xs text-right">
+                        <p className="flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground shrink-0" />{profile.address}</p>
+                        <p className="flex items-center justify-end gap-2" dir="ltr"><Phone className="size-3.5 text-muted-foreground shrink-0" />{profile.phone}</p>
                         {profile.website && (
-                          <p className="flex items-center gap-2" dir="ltr"><Globe className="size-3.5 text-muted-foreground" />{profile.website}</p>
+                          <p className="flex items-center justify-end gap-2" dir="ltr"><Globe className="size-3.5 text-muted-foreground shrink-0" />{profile.website}</p>
                         )}
                       </div>
                       <div className="flex gap-2 pt-1">
@@ -502,9 +502,9 @@ function Kpi({ icon: Icon, label, value, delta, gold }: { icon: React.ComponentT
 
 function Row({ label, value }: { label: string, value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between text-sm border-b border-border/60 pb-2 last:border-0">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-semibold">{value}</span>
+    <div className="flex items-center justify-between gap-4 text-sm border-b border-border/60 pb-2 last:border-0 text-right">
+      <span className="text-muted-foreground shrink-0">{label}</span>
+      <span className="font-semibold text-right">{value}</span>
     </div>
   );
 }
