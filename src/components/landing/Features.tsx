@@ -20,7 +20,7 @@ export function Features() {
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="text-center mb-14">
+        <div className="text-right mb-14">
           <h2 className="text-4xl md:text-5xl font-extrabold">قدرات تجعل الفرق <span className="text-gradient-gold">واضحاً</span></h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">كل ما تحتاجه لتصميم منزلك كمحترف، بدون أي خبرة سابقة.</p>
         </div>

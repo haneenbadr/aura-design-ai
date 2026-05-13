@@ -16,7 +16,7 @@ export function HowItWorks() {
         backgroundSize: "24px 24px",
       }} />
       <div className="relative mx-auto max-w-7xl px-4">
-        <div className="text-center mb-16">
+        <div className="text-right mb-16">
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-accent mb-3">
             كيف يعمل
           </div>

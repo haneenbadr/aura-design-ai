@@ -14,7 +14,7 @@ export function Testimonials() {
         backgroundSize: "80px 80px",
       }} />
       <div className="relative mx-auto max-w-7xl px-4">
-        <div className="text-center mb-14">
+        <div className="text-right mb-14">
           <h2 className="text-4xl md:text-5xl font-extrabold">يحبّونه. <span className="text-gradient-gold">حقاً.</span></h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
