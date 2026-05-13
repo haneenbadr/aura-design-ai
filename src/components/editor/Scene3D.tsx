@@ -1,7 +1,14 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Environment, ContactShadows, Html } from "@react-three/drei";
-import { Suspense, useMemo } from "react";
+import { Suspense, forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
+import type { Scene, WebGLRenderer, PerspectiveCamera } from "three";
 import { FURNITURE, type PlacedItem } from "./furniture";
+
+export interface Scene3DHandle {
+  exportPNG: (scale?: number) => Promise<void>;
+  exportGLB: () => Promise<void>;
+}
 
 interface Props {
   items: PlacedItem[];
