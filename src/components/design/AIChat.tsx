@@ -62,17 +62,17 @@ export function AIChat({ context, onApplyEdit, applying }: AIChatProps) {
 
   return (
     <>
-      {/* Floating toggle button */}
+      {/* Floating toggle button — anchored to nearest positioned ancestor */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 left-6 z-40 size-14 rounded-2xl bg-gradient-gold text-gold-foreground shadow-glow grid place-items-center hover:scale-105 transition-transform"
+        className="absolute bottom-6 left-6 z-40 size-12 rounded-2xl bg-gradient-gold text-gold-foreground shadow-glow grid place-items-center hover:scale-105 transition-transform"
         aria-label="افتح المحادثة"
       >
-        {open ? <X className="size-6" /> : <MessageCircle className="size-6" />}
+        {open ? <X className="size-5" /> : <MessageCircle className="size-5" />}
       </button>
 
       {open && (
-        <div className="fixed bottom-24 left-6 z-40 w-[min(380px,calc(100vw-3rem))] h-[min(560px,calc(100vh-10rem))] rounded-3xl bg-card border border-border/60 shadow-elegant flex flex-col overflow-hidden animate-fade-up">
+        <div className="absolute bottom-20 left-6 z-40 w-[min(360px,calc(100%-3rem))] h-[min(520px,calc(100%-6rem))] rounded-3xl bg-card border border-border/60 shadow-elegant flex flex-col overflow-hidden animate-fade-up">
           {/* Header */}
           <div className="px-4 py-3 border-b border-border bg-gradient-hero flex items-center gap-2">
             <div className="size-8 rounded-xl bg-gradient-gold grid place-items-center">
