@@ -3,6 +3,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { Sparkles, Mail, Lock, User, Store, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,12 +58,17 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    // TODO: اربط هنا الـ backend الخاص بك
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("أهلاً بعودتك");
-      navigate({ to: "/design" });
-    }, 600);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginEmail,
+      password: loginPassword,
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("أهلاً بعودتك");
+    navigate({ to: "/designs" });
   }
 
   async function handleSignup(e: React.FormEvent) {
@@ -73,12 +79,22 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    // TODO: اربط هنا الـ backend الخاص بك
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("تم إنشاء حسابك بنجاح");
-      setTab("login");
-    }, 600);
+    const redirectUrl = `${window.location.origin}/designs`;
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: { full_name: name, role },
+      },
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("تم إنشاء حسابك بنجاح، تحقق من بريدك للتفعيل");
+    setTab("login");
   }
 
   return (
