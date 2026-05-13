@@ -195,7 +195,7 @@ function VendorPage() {
 
         {/* Tabs */}
         <section className="mx-auto max-w-7xl px-4 mt-10">
-          <Tabs value={tab} onValueChange={setTab}>
+          <Tabs value={tab} onValueChange={setTab} dir="rtl">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
               <TabsTrigger value="overview"><BarChart3 className="size-4" /> نظرة عامة</TabsTrigger>
               <TabsTrigger value="products"><Package className="size-4" /> منتجاتي</TabsTrigger>
