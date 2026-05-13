@@ -287,7 +287,84 @@ function MarketplacePage() {
             </p>
           </div>
         </section>
+          </div>
+        </section>
       </main>
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+        <DialogContent className="sm:max-w-lg text-right" dir="rtl">
+          {selected && (
+            <>
+              <div className="relative aspect-[16/9] -mx-6 -mt-6 mb-4 overflow-hidden">
+                <img src={selected.img} alt={selected.productTitle} className="size-full object-cover" />
+                {selected.verified && (
+                  <Badge variant="secondary" className="absolute top-3 right-3 shadow-soft gap-1">
+                    <ShieldCheck className="size-3" /> مورد موثّق
+                  </Badge>
+                )}
+              </div>
+              <DialogHeader className="text-right">
+                <DialogTitle className="text-right text-xl font-extrabold">{selected.vendor}</DialogTitle>
+                <DialogDescription className="text-right">
+                  المنتج المطابق: <span className="text-foreground font-medium">{selected.productTitle}</span>
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="mt-4 space-y-3 text-sm">
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">المدينة</p>
+                    <p className="font-medium">{selected.city}</p>
+                  </div>
+                  <MapPin className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">العنوان</p>
+                    <p className="font-medium">{selected.address}</p>
+                  </div>
+                  <MapPin className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">رقم الهاتف</p>
+                    <p className="font-medium" dir="ltr">{selected.phone}</p>
+                  </div>
+                  <Phone className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                {selected.whatsapp && (
+                  <div className="flex items-start gap-3 justify-end">
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">واتساب</p>
+                      <p className="font-medium" dir="ltr">{selected.whatsapp}</p>
+                    </div>
+                    <MessageCircle className="size-4 text-accent shrink-0 mt-1" />
+                  </div>
+                )}
+                {selected.website && (
+                  <div className="flex items-start gap-3 justify-end">
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">الموقع الإلكتروني</p>
+                      <a href={selected.website} target="_blank" rel="noreferrer" className="font-medium text-accent hover:underline" dir="ltr">{selected.website}</a>
+                    </div>
+                    <Globe className="size-4 text-accent shrink-0 mt-1" />
+                  </div>
+                )}
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <span className="text-muted-foreground">({selected.reviews} مراجعة)</span>
+                  <span className="font-semibold">{selected.rating}</span>
+                  <Star className="size-4 fill-gold text-gold" />
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs text-muted-foreground bg-secondary/40 rounded-lg p-3 text-right">
+                التواصل والاتفاق يتمّان مباشرة بينك وبين المورد خارج المنصة.
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <SiteFooter />
     </div>
   );
