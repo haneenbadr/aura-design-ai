@@ -167,32 +167,26 @@ function Editor() {
           </div>
 
           <div className="flex items-center gap-1">
-            <button
-              onClick={undo}
-              className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
-              aria-label="تراجع"
-              title="تراجع (Ctrl+Z)"
-            >
-              <Undo2 className="size-4" />
-            </button>
-            <button
-              onClick={redo}
-              className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
-              aria-label="إعادة"
-              title="إعادة (Ctrl+Y)"
-            >
-              <Redo2 className="size-4" />
-            </button>
-            <div className="w-px h-6 bg-border mx-1" />
-            {bgUrl && (
-              <button
-                onClick={() => setShowBg((v) => !v)}
-                className={`size-9 rounded-lg grid place-items-center ${showBg ? "bg-gold/20 text-gold-foreground" : "hover:bg-secondary"}`}
-                aria-label="إظهار التصميم"
-                title="إظهار/إخفاء صورة التصميم المولّد"
-              >
-                <Image className="size-4" />
-              </button>
+            {mode === "3d" && (
+              <>
+                <button
+                  onClick={undo}
+                  className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
+                  aria-label="تراجع"
+                  title="تراجع (Ctrl+Z)"
+                >
+                  <Undo2 className="size-4" />
+                </button>
+                <button
+                  onClick={redo}
+                  className="size-9 rounded-lg hover:bg-secondary grid place-items-center"
+                  aria-label="إعادة"
+                  title="إعادة (Ctrl+Y)"
+                >
+                  <Redo2 className="size-4" />
+                </button>
+                <div className="w-px h-6 bg-border mx-1" />
+              </>
             )}
             {mode === "3d" ? (
               <>
@@ -218,6 +212,7 @@ function Editor() {
       {/* Body */}
       <div className="flex-1 flex min-h-0">
         {/* Sidebar */}
+        {mode === "3d" && (
         <aside className="w-72 shrink-0 border-l border-border bg-card/60 flex flex-col">
           <div className="p-4 border-b border-border">
             <h3 className="font-bold flex items-center gap-2 mb-3">
@@ -274,26 +269,23 @@ function Editor() {
             <p>اضغط القطعة للتدوير أو الحذف</p>
           </div>
         </aside>
+        )}
 
         {/* Canvas area */}
         <main className="flex-1 p-4 min-w-0 relative">
           {mode === "2d" ? (
-            <div className="relative h-full w-full">
-              {bgUrl && showBg && (
-                <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">
-                  <img src={bgUrl} alt="تصميم AI" className="size-full object-cover opacity-60" />
-                  <div className="absolute inset-0 bg-card/30" />
+            <div className="relative h-full w-full rounded-2xl overflow-hidden border border-border bg-card grid place-items-center">
+              {bgUrl ? (
+                <img src={bgUrl} alt="تصميم AI" className="size-full object-cover" />
+              ) : (
+                <div className="text-center p-8">
+                  <div className="size-16 mx-auto rounded-2xl bg-secondary grid place-items-center mb-3">
+                    <Image className="size-7 text-muted-foreground" />
+                  </div>
+                  <p className="font-semibold">لا توجد صورة بعد</p>
+                  <p className="text-sm text-muted-foreground mt-1">استخدم المساعد لتوليد تصميم</p>
                 </div>
               )}
-              <div className="relative h-full w-full z-10">
-                <Canvas2D
-                  items={items}
-                  setItems={setItems}
-                  selected={selected}
-                  setSelected={setSelected}
-                  onDropItem={onDropItem}
-                />
-              </div>
             </div>
           ) : (
             <Scene3D ref={scene3dRef} items={items} selected={selected} setSelected={setSelected} />
