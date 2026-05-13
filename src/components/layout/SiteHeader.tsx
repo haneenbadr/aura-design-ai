@@ -7,7 +7,6 @@ const nav = [
   { to: "/", label: "الرئيسية" },
   { to: "/design", label: "صمم غرفتك" },
   { to: "/marketplace", label: "السوق" },
-  { to: "/vendor", label: "الموردون" },
 ] as const;
 
 export function SiteHeader() {
