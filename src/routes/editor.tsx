@@ -194,9 +194,20 @@ function Editor() {
                 <Image className="size-4" />
               </button>
             )}
-            <Button variant="ghost" size="sm">
-              <Download className="size-4" /> تصدير
-            </Button>
+            {mode === "3d" ? (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => scene3dRef.current?.exportPNG(2)} title="تصدير صورة PNG عالية الدقة">
+                  <Download className="size-4" /> PNG
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => scene3dRef.current?.exportGLB()} title="تصدير المشهد كملف GLB">
+                  <Box className="size-4" /> GLB
+                </Button>
+              </>
+            ) : (
+              <Button variant="ghost" size="sm">
+                <Download className="size-4" /> تصدير
+              </Button>
+            )}
             <Button variant="hero" size="sm" onClick={doSave}>
               <Save className="size-4" /> {saved ? "تم الحفظ" : "حفظ"}
             </Button>
