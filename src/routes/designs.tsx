@@ -258,8 +258,10 @@ function DesignsPage() {
                   جميع مشاريعك في مكان واحد. أنشئ تصميماً جديداً، عدّل القديم، أو افتح التفاصيل لاستكمال العمل.
                 </p>
               </div>
-              <Button variant="hero" size="lg" onClick={() => setCreating(true)} className="shrink-0">
-                <Plus className="size-5" /> تصميم جديد
+              <Button variant="hero" size="lg" asChild className="shrink-0">
+                <Link to="/design">
+                  <Plus className="size-5" /> تصميم جديد
+                </Link>
               </Button>
             </div>
           </div>
