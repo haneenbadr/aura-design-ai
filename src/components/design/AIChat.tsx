@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import { Sparkles, Send, Loader2, Wand2, X, MessageCircle } from "lucide-react";
-import { chatDesign } from "@/lib/chat-design.functions";
 import { Button } from "@/components/ui/button";
 
 export type ChatMsg = { role: "user" | "assistant"; content: string };
@@ -27,7 +25,6 @@ export function AIChat({ context, onApplyEdit, applying }: AIChatProps) {
   const [pending, setPending] = useState<{ reply: string; extra: string } | null>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const chat = useServerFn(chatDesign);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,17 +38,15 @@ export function AIChat({ context, onApplyEdit, applying }: AIChatProps) {
     setMessages(next);
     setInput("");
     setLoading(true);
-    try {
-      const res = await chat({ data: { messages: next, context } });
-      setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
-      if (res.regenerate?.extraInstructions) {
-        setPending({ reply: res.reply, extra: res.regenerate.extraInstructions });
-      }
-    } catch (e) {
-      setMessages((m) => [...m, { role: "assistant", content: "تعذّر الرد، حاول مرة أخرى." }]);
-    } finally {
+    // محاكاة رد المساعد — اربط backend الخاص بك هنا
+    setTimeout(() => {
+      const reply = "تمام! هطبّق التعديل ده على التصميم.";
+      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      setPending({ reply, extra: text });
       setLoading(false);
-    }
+    }, 600);
+    // مرجع للسياق المستقبلي
+    void context;
   };
 
   const apply = async () => {

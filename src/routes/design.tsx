@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
-import { generateDesign } from "@/lib/generate-design.functions";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
   Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
@@ -59,7 +57,6 @@ function DesignWizard() {
   const [done, setDone] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const generate = useServerFn(generateDesign);
 
   const canNext =
     (step === 0 && room) ||
@@ -72,38 +69,18 @@ function DesignWizard() {
     if (step === 4) {
       setGenerating(true);
       setError(null);
-      const res = await generate({ data: { room, style, prompt, chips } });
+      // محاكاة توليد التصميم — اربط backend هنا
+      await new Promise((r) => setTimeout(r, 1200));
+      const imageUrl = "https://picsum.photos/seed/dari-design/1024/640";
       setGenerating(false);
-      if (res.error || !res.imageUrl) {
-        setError(res.error ?? "تعذّر التوليد");
-        return;
-      }
-      // Persist for the editor to pick up
-      try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
-      setResultUrl(res.imageUrl);
+      try { sessionStorage.setItem("dari:lastDesign", imageUrl); } catch {}
+      setResultUrl(imageUrl);
       setDone(true);
       return;
     }
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   };
   const back = () => setStep((s) => Math.max(s - 1, 0));
-
-  const applyEdit = async (extra: string) => {
-    setGenerating(true);
-    setError(null);
-    const mergedPrompt = [prompt, extra].filter(Boolean).join(". ");
-    const res = await generate({ data: { room, style, prompt: mergedPrompt, chips } });
-    setGenerating(false);
-    if (res.error || !res.imageUrl) {
-      setError(res.error ?? "تعذّر التوليد");
-      return;
-    }
-    try { sessionStorage.setItem("dari:lastDesign", res.imageUrl); } catch {}
-    setResultUrl(res.imageUrl);
-    setDone(true);
-    setStep(4);
-    setPrompt(mergedPrompt);
-  };
 
   const toggleChip = (c: string) =>
     setChips((arr) => arr.includes(c) ? arr.filter((x) => x !== c) : [...arr, c]);
