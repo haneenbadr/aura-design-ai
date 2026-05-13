@@ -134,24 +134,24 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-background">
+    <div className="relative min-h-screen overflow-hidden bg-background isolate">
       <Toaster richColors position="top-center" />
       {/* Soft, faded background image */}
       <div
-        className="absolute inset-0 -z-20 bg-center bg-cover opacity-25 blur-[2px] scale-105"
+        className="absolute inset-0 z-0 scale-105 bg-cover bg-center opacity-35 blur-[1px]"
         style={{ backgroundImage: `url(${authBg})` }}
         aria-hidden
       />
       {/* Color wash on top of the image */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/85 via-background/70 to-background/95" aria-hidden />
+       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/70 via-background/55 to-background/85" aria-hidden />
       {/* Decorative glows */}
-      <div className="absolute inset-0 -z-10 pointer-events-none" aria-hidden>
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <div className="absolute -top-40 -right-40 size-[520px] rounded-full bg-gradient-wood opacity-25 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 size-[520px] rounded-full bg-gold/25 blur-3xl" />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 size-[380px] rounded-full bg-primary/10 blur-3xl" />
       </div>
 
-      <div className="mx-auto max-w-md px-4 py-12 min-h-screen flex flex-col justify-center">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">
         <Link to="/" className="flex items-center gap-2 justify-center mb-8 group">
           <div className="size-11 rounded-xl bg-gradient-wood grid place-items-center shadow-soft group-hover:shadow-glow transition-shadow">
             <Sparkles className="size-5 text-primary-foreground" />
