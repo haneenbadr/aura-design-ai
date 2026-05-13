@@ -218,6 +218,7 @@ function Editor() {
       {/* Body */}
       <div className="flex-1 flex min-h-0">
         {/* Sidebar */}
+        {mode === "3d" && (
         <aside className="w-72 shrink-0 border-l border-border bg-card/60 flex flex-col">
           <div className="p-4 border-b border-border">
             <h3 className="font-bold flex items-center gap-2 mb-3">
