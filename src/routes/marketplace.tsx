@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   Search, SlidersHorizontal, Heart, Star, Sparkles,
-  ShieldCheck, MapPin, Phone, MessageCircle, Store, Wand2, ArrowLeft,
+  ShieldCheck, MapPin, Phone, MessageCircle, Store, Wand2, ArrowLeft, Globe,
 } from "lucide-react";
 import insp1 from "@/assets/insp-1.jpg";
 import insp2 from "@/assets/insp-2.jpg";
