@@ -6,6 +6,7 @@ import { useState } from "react";
 const nav = [
   { to: "/", label: "الرئيسية" },
   { to: "/design", label: "صمم غرفتك" },
+  { to: "/designs", label: "تصاميمي" },
   { to: "/marketplace", label: "السوق" },
 ] as const;
 
