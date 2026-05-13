@@ -365,7 +365,7 @@ function VendorPage() {
                     <h3 className="font-extrabold">معاينة بطاقة المتجر</h3>
                     <p className="text-xs text-muted-foreground">هكذا يراها العميل في صفحة المنتج.</p>
                     <div className="rounded-2xl border border-border/60 p-4 space-y-3 bg-secondary/30">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 text-right">
                         <div className="size-12 rounded-xl bg-gradient-wood grid place-items-center text-primary-foreground font-bold text-lg">
                           {profile.storeName.charAt(0)}
                         </div>
@@ -377,11 +377,11 @@ function VendorPage() {
                         </div>
                       </div>
                       <p className="text-xs text-foreground/80 leading-relaxed">{profile.bio}</p>
-                      <div className="space-y-1.5 text-xs">
-                        <p className="flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground" />{profile.address}</p>
-                        <p className="flex items-center gap-2" dir="ltr"><Phone className="size-3.5 text-muted-foreground" />{profile.phone}</p>
+                      <div className="space-y-1.5 text-xs text-right">
+                        <p className="flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground shrink-0" />{profile.address}</p>
+                        <p className="flex items-center justify-end gap-2" dir="ltr"><Phone className="size-3.5 text-muted-foreground shrink-0" />{profile.phone}</p>
                         {profile.website && (
-                          <p className="flex items-center gap-2" dir="ltr"><Globe className="size-3.5 text-muted-foreground" />{profile.website}</p>
+                          <p className="flex items-center justify-end gap-2" dir="ltr"><Globe className="size-3.5 text-muted-foreground shrink-0" />{profile.website}</p>
                         )}
                       </div>
                       <div className="flex gap-2 pt-1">
