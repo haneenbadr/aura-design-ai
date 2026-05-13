@@ -292,7 +292,7 @@ function DesignsPage() {
               <Loader2 className="size-8 animate-spin text-muted-foreground" />
             </div>
           ) : list.length === 0 ? (
-            <EmptyState onCreate={() => setCreating(true)} hasFilter={search.length > 0} />
+            <EmptyState hasFilter={search.length > 0} />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {list.map((d) => (
