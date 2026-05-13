@@ -215,7 +215,14 @@ function MarketplacePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {list.map((p) => (
-                <Card key={p.id} className="overflow-hidden hover-lift group border-border/60 flex flex-col">
+                <Card
+                  key={p.id}
+                  onClick={() => setSelected(p)}
+                  className="overflow-hidden hover-lift group border-border/60 flex flex-col cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(p); } }}
+                >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img src={p.img} alt={p.productTitle} loading="lazy" className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute top-3 right-3 flex flex-col gap-1.5">
@@ -229,14 +236,14 @@ function MarketplacePage() {
                       )}
                     </div>
                     <button
-                      onClick={() => toggleFav(p.id)}
+                      onClick={(e) => { e.stopPropagation(); toggleFav(p.id); }}
                       className="absolute top-3 left-3 size-9 rounded-full glass grid place-items-center hover:bg-card"
                       aria-label="المفضلة"
                     >
                       <Heart className={`size-4 ${favs.has(p.id) ? "fill-destructive text-destructive" : ""}`} />
                     </button>
                   </div>
-                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
+                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col text-right">
                     <div>
                       <div className="inline-flex items-center gap-1 text-[11px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
                         <Sparkles className="size-3" /> شبيه بـ: {p.similarTo}
@@ -259,15 +266,7 @@ function MarketplacePage() {
                       <span className="text-muted-foreground font-normal">({p.reviews} مراجعة)</span>
                     </div>
 
-                    <div className="flex gap-2 mt-auto pt-2">
-                      <Button variant="gold" size="sm" className="flex-1">
-                        <MessageCircle className="size-4" />
-                        تواصل مع المورد
-                      </Button>
-                      <Button variant="outline" size="icon" aria-label="اتصال">
-                        <Phone className="size-4" />
-                      </Button>
-                    </div>
+                    <p className="mt-auto pt-2 text-[11px] text-muted-foreground">اضغط لعرض بيانات المورد</p>
                   </CardContent>
                 </Card>
               ))}
