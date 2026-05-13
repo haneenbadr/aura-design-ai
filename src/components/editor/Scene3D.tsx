@@ -152,24 +152,83 @@ function Room({ w, d }: { w: number; d: number }) {
   );
 }
 
-export function Scene3D({
-  items,
-  selected,
-  setSelected,
-  roomPxWidth = 760,
-  roomPxHeight = 500,
-}: Props) {
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function ExportBridge({
+  registerHandle,
+}: {
+  registerHandle: (h: { gl: WebGLRenderer; scene: Scene; camera: PerspectiveCamera }) => void;
+}) {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    registerHandle({ gl, scene, camera: camera as PerspectiveCamera });
+  }, [gl, scene, camera, registerHandle]);
+  return null;
+}
+
+export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
+  { items, selected, setSelected, roomPxWidth = 760, roomPxHeight = 500 },
+  ref,
+) {
   const roomW = useMemo(() => roomPxWidth / PX_PER_M, [roomPxWidth]);
   const roomD = useMemo(() => roomPxHeight / PX_PER_M, [roomPxHeight]);
+  const sceneApi = useRef<{ gl: WebGLRenderer; scene: Scene; camera: PerspectiveCamera } | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    exportPNG: async (scale = 2) => {
+      const api = sceneApi.current;
+      if (!api) return;
+      const { gl, scene, camera } = api;
+      const size = gl.getSize({ x: 0, y: 0 } as never as { x: number; y: number });
+      const pr = gl.getPixelRatio();
+      try {
+        gl.setPixelRatio(scale * pr);
+        gl.render(scene, camera);
+        const dataUrl = gl.domElement.toDataURL("image/png");
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        downloadBlob(blob, `dari-3d-${Date.now()}.png`);
+      } finally {
+        gl.setPixelRatio(pr);
+        gl.setSize(size.x, size.y, false);
+        gl.render(scene, camera);
+      }
+    },
+    exportGLB: async () => {
+      const api = sceneApi.current;
+      if (!api) return;
+      const exporter = new GLTFExporter();
+      const result = await new Promise<ArrayBuffer>((resolve, reject) => {
+        exporter.parse(
+          api.scene,
+          (out) => resolve(out as ArrayBuffer),
+          (err) => reject(err),
+          { binary: true },
+        );
+      });
+      downloadBlob(new Blob([result], { type: "model/gltf-binary" }), `dari-3d-${Date.now()}.glb`);
+    },
+  }));
 
   return (
     <div className="h-full w-full rounded-2xl overflow-hidden border border-border relative bg-gradient-to-b from-[hsl(35,30%,92%)] to-[hsl(30,25%,82%)]">
       <Canvas
         shadows
+        gl={{ preserveDrawingBuffer: true, antialias: true }}
         camera={{ position: [roomW * 0.9, roomW * 0.7, roomD * 0.9], fov: 45 }}
         onPointerMissed={() => setSelected(null)}
       >
         <Suspense fallback={<Html center><div className="text-xs text-muted-foreground">جاري تحميل المشهد...</div></Html>}>
+          <ExportBridge registerHandle={(h) => { sceneApi.current = h; }} />
           <ambientLight intensity={0.55} />
           <directionalLight
             position={[5, 8, 5]}
@@ -208,4 +267,5 @@ export function Scene3D({
       </div>
     </div>
   );
-}
+});
+
