@@ -218,7 +218,8 @@ function MarketplacePage() {
                 <Card
                   key={p.id}
                   onClick={() => setSelected(p)}
-                  className="overflow-hidden hover-lift group border-border/60 flex flex-col cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="overflow-hidden hover-lift group border-border/60 flex flex-col cursor-pointer text-right focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  dir="rtl"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(p); } }}
@@ -243,30 +244,30 @@ function MarketplacePage() {
                       <Heart className={`size-4 ${favs.has(p.id) ? "fill-destructive text-destructive" : ""}`} />
                     </button>
                   </div>
-                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col text-right">
-                    <div>
+                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col items-end text-right">
+                    <div className="w-full text-right">
                       <div className="inline-flex items-center gap-1 text-[11px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
                         <Sparkles className="size-3" /> شبيه بـ: {p.similarTo}
                       </div>
-                      <h3 className="font-bold leading-tight">{p.productTitle}</h3>
+                      <h3 className="font-bold leading-tight text-right">{p.productTitle}</h3>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span className="inline-flex items-center gap-1">
+                    <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 text-right">
                         <Store className="size-3.5" /> {p.vendor}
                       </span>
-                      <span className="inline-flex items-center gap-1">
+                      <span className="inline-flex items-center gap-1 text-right">
                         <MapPin className="size-3.5" /> {p.city}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs font-semibold">
+                    <div className="flex w-full items-center justify-end gap-1 text-xs font-semibold text-right">
                       <Star className="size-3.5 fill-gold text-gold" />
                       {p.rating}
                       <span className="text-muted-foreground font-normal">({p.reviews} مراجعة)</span>
                     </div>
 
-                    <p className="mt-auto pt-2 text-[11px] text-muted-foreground">اضغط لعرض بيانات المورد</p>
+                    <p className="mt-auto w-full pt-2 text-[11px] text-muted-foreground text-right">اضغط لعرض بيانات المورد</p>
                   </CardContent>
                 </Card>
               ))}
