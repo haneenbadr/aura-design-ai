@@ -296,7 +296,7 @@ function Editor() {
               </div>
             </div>
           ) : (
-            <Scene3D items={items} selected={selected} setSelected={setSelected} />
+            <Scene3D ref={scene3dRef} items={items} selected={selected} setSelected={setSelected} />
           )}
         </main>
       </div>
