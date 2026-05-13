@@ -87,6 +87,7 @@ function Editor() {
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [showBg, setShowBg] = useState(true);
   const [regenerating, setRegenerating] = useState(false);
+  const scene3dRef = useRef<Scene3DHandle | null>(null);
 
   // Load AI-generated design from previous step
   useEffect(() => {
