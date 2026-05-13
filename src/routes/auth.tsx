@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Toaster } from "@/components/ui/sonner";
+import authBg from "@/assets/hero-room.jpg";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -135,10 +136,19 @@ function AuthPage() {
   return (
     <div className="min-h-screen relative overflow-hidden bg-background">
       <Toaster richColors position="top-center" />
-      {/* decorative background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute -top-40 -right-40 size-[500px] rounded-full bg-gradient-wood opacity-20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 size-[500px] rounded-full bg-gold/20 blur-3xl" />
+      {/* Soft, faded background image */}
+      <div
+        className="absolute inset-0 -z-20 bg-center bg-cover opacity-25 blur-[2px] scale-105"
+        style={{ backgroundImage: `url(${authBg})` }}
+        aria-hidden
+      />
+      {/* Color wash on top of the image */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/85 via-background/70 to-background/95" aria-hidden />
+      {/* Decorative glows */}
+      <div className="absolute inset-0 -z-10 pointer-events-none" aria-hidden>
+        <div className="absolute -top-40 -right-40 size-[520px] rounded-full bg-gradient-wood opacity-25 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 size-[520px] rounded-full bg-gold/25 blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 size-[380px] rounded-full bg-primary/10 blur-3xl" />
       </div>
 
       <div className="mx-auto max-w-md px-4 py-12 min-h-screen flex flex-col justify-center">
