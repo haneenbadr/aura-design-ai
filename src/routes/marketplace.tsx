@@ -35,6 +35,10 @@ type Match = {
   productTitle: string;     // اسم المنتج عند المورد
   vendor: string;
   city: string;
+  address: string;
+  phone: string;
+  whatsapp?: string;
+  website?: string;
   rating: number;
   reviews: number;
   category: "أثاث" | "إضاءة" | "سجاد" | "ديكور" | "مطبخ";
@@ -46,14 +50,14 @@ type Match = {
 };
 
 const MATCHES: Match[] = [
-  { id: "m1", productTitle: "سرير خشبي مزدوج بإطار طبيعي", vendor: "ورشة الخشب", city: "الرياض", rating: 4.8, reviews: 124, category: "أثاث", style: "اسكندنافي", match: 96, similarTo: "السرير في غرفة النوم", img: insp1, verified: true },
-  { id: "m2", productTitle: "مجلس عربي مطرز بألوان دافئة", vendor: "بيت التراث", city: "جدة", rating: 4.9, reviews: 87, category: "أثاث", style: "تراثي", match: 92, similarTo: "مجلس الضيوف", img: insp2, verified: true },
-  { id: "m3", productTitle: "ثريا كريستال متوسطة", vendor: "نور للإضاءة", city: "الدمام", rating: 4.7, reviews: 210, category: "إضاءة", style: "كلاسيكي", match: 88, similarTo: "إضاءة الصالة", img: insp3 },
-  { id: "m4", productTitle: "مكتبة جدارية بخشب البلوط", vendor: "بلوط ديزاين", city: "الرياض", rating: 4.6, reviews: 56, category: "أثاث", style: "حديث", match: 94, similarTo: "ركن القراءة", img: insp4, verified: true },
-  { id: "m5", productTitle: "مكتب عمل بسيط بسطح خشبي", vendor: "ميسان", city: "الخبر", rating: 4.5, reviews: 142, category: "أثاث", style: "حديث", match: 90, similarTo: "المكتب المنزلي", img: insp5 },
-  { id: "m6", productTitle: "مرآة جدارية بإطار حجري", vendor: "ستون آرت", city: "جدة", rating: 4.8, reviews: 64, category: "ديكور", style: "كلاسيكي", match: 86, similarTo: "ديكور المدخل", img: insp6 },
-  { id: "m7", productTitle: "سجادة صوف يدوية بألوان ترابية", vendor: "نسيج", city: "الرياض", rating: 4.9, reviews: 198, category: "سجاد", style: "بوهيمي", match: 91, similarTo: "سجادة المعيشة", img: insp2, verified: true },
-  { id: "m8", productTitle: "أباجورة خشبية دافئة", vendor: "نور للإضاءة", city: "الدمام", rating: 4.4, reviews: 76, category: "إضاءة", style: "اسكندنافي", match: 89, similarTo: "إضاءة جانب السرير", img: insp4 },
+  { id: "m1", productTitle: "سرير خشبي مزدوج بإطار طبيعي", vendor: "ورشة الخشب", city: "الرياض", address: "حي العليا، شارع التحلية", phone: "+966 55 123 4567", whatsapp: "+966 55 123 4567", website: "https://workshop-wood.sa", rating: 4.8, reviews: 124, category: "أثاث", style: "اسكندنافي", match: 96, similarTo: "السرير في غرفة النوم", img: insp1, verified: true },
+  { id: "m2", productTitle: "مجلس عربي مطرز بألوان دافئة", vendor: "بيت التراث", city: "جدة", address: "حي الروضة، طريق الأمير سلطان", phone: "+966 56 222 3344", whatsapp: "+966 56 222 3344", rating: 4.9, reviews: 87, category: "أثاث", style: "تراثي", match: 92, similarTo: "مجلس الضيوف", img: insp2, verified: true },
+  { id: "m3", productTitle: "ثريا كريستال متوسطة", vendor: "نور للإضاءة", city: "الدمام", address: "حي الفيصلية، شارع الملك فهد", phone: "+966 53 998 1122", website: "https://noor-light.sa", rating: 4.7, reviews: 210, category: "إضاءة", style: "كلاسيكي", match: 88, similarTo: "إضاءة الصالة", img: insp3 },
+  { id: "m4", productTitle: "مكتبة جدارية بخشب البلوط", vendor: "بلوط ديزاين", city: "الرياض", address: "حي الملقا، طريق الملك سلمان", phone: "+966 50 765 4321", whatsapp: "+966 50 765 4321", rating: 4.6, reviews: 56, category: "أثاث", style: "حديث", match: 94, similarTo: "ركن القراءة", img: insp4, verified: true },
+  { id: "m5", productTitle: "مكتب عمل بسيط بسطح خشبي", vendor: "ميسان", city: "الخبر", address: "حي العقربية، شارع الكورنيش", phone: "+966 54 321 0987", rating: 4.5, reviews: 142, category: "أثاث", style: "حديث", match: 90, similarTo: "المكتب المنزلي", img: insp5 },
+  { id: "m6", productTitle: "مرآة جدارية بإطار حجري", vendor: "ستون آرت", city: "جدة", address: "حي السلامة، شارع فلسطين", phone: "+966 55 444 7788", website: "https://stone-art.sa", rating: 4.8, reviews: 64, category: "ديكور", style: "كلاسيكي", match: 86, similarTo: "ديكور المدخل", img: insp6 },
+  { id: "m7", productTitle: "سجادة صوف يدوية بألوان ترابية", vendor: "نسيج", city: "الرياض", address: "حي الورود، شارع موسى بن نصير", phone: "+966 58 111 2233", whatsapp: "+966 58 111 2233", rating: 4.9, reviews: 198, category: "سجاد", style: "بوهيمي", match: 91, similarTo: "سجادة المعيشة", img: insp2, verified: true },
+  { id: "m8", productTitle: "أباجورة خشبية دافئة", vendor: "نور للإضاءة", city: "الدمام", address: "حي الفيصلية، شارع الملك فهد", phone: "+966 53 998 1122", website: "https://noor-light.sa", rating: 4.4, reviews: 76, category: "إضاءة", style: "اسكندنافي", match: 89, similarTo: "إضاءة جانب السرير", img: insp4 },
 ];
 
 const CATEGORIES = ["الكل", "أثاث", "إضاءة", "سجاد", "ديكور", "مطبخ"] as const;
