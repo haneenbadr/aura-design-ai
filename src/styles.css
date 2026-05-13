@@ -4,8 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Cairo - Arabic-first typography */
-@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap");
+/* Readex Pro - Arabic-first typography */
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap");
 
 /* ============================================================
    DESIGN SYSTEM — DARI AI Interior Design
@@ -14,7 +14,7 @@
    ============================================================ */
 
 @theme inline {
-  --font-sans: "Cairo", system-ui, sans-serif;
+  --font-sans: "Readex Pro", system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
