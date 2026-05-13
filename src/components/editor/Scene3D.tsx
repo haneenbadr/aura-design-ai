@@ -38,19 +38,13 @@ const META: Record<string, { h: number; color: string; kind?: "lamp" | "tv" | "p
   "plant":      { h: 0.9,  color: "#3f6b3a", kind: "plant" },
 };
 
-function Furniture({
-  item,
-  onSelect,
-  isSelected,
-  roomW,
-  roomD,
-}: {
+const Furniture = forwardRef<Group, {
   item: PlacedItem;
   onSelect: () => void;
   isSelected: boolean;
   roomW: number;
   roomD: number;
-}) {
+}>(function Furniture({ item, onSelect, isSelected, roomW, roomD }, ref) {
   const def = FURNITURE.find((f) => f.id === item.itemId);
   if (!def) return null;
   const meta = META[item.itemId] ?? { h: 0.6, color: "#8a6a4a" };
@@ -61,12 +55,12 @@ function Furniture({
   const h = meta.h;
 
   // position: center in room. 2D origin (0,0) is top-left of canvas.
-  // Item x,y in 2D refers to top-left of element box (Canvas2D translates by -w/2,-h/2 visually via centering — we treat as center for parity)
   const x = item.x / PX_PER_M - roomW / 2;
   const z = item.y / PX_PER_M - roomD / 2;
 
   return (
     <group
+      ref={ref}
       position={[x, 0, z]}
       rotation={[0, (-item.rotation * Math.PI) / 180, 0]}
       onClick={(e) => { e.stopPropagation(); onSelect(); }}
