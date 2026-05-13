@@ -502,9 +502,9 @@ function Kpi({ icon: Icon, label, value, delta, gold }: { icon: React.ComponentT
 
 function Row({ label, value }: { label: string, value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between text-sm border-b border-border/60 pb-2 last:border-0">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-semibold">{value}</span>
+    <div className="flex items-center justify-between gap-4 text-sm border-b border-border/60 pb-2 last:border-0 text-right">
+      <span className="text-muted-foreground shrink-0">{label}</span>
+      <span className="font-semibold text-right">{value}</span>
     </div>
   );
 }
