@@ -261,9 +261,9 @@ function MarketplacePage() {
                       </span>
                     </div>
 
-                    <div className="flex w-full items-center justify-end gap-1 text-xs font-semibold text-right">
+                    <div className="flex w-full items-center justify-start gap-1 text-xs font-semibold text-right">
                       <Star className="size-3.5 fill-gold text-gold" />
-                      {p.rating}
+                      <span>{p.rating}</span>
                       <span className="text-muted-foreground font-normal">({p.reviews} مراجعة)</span>
                     </div>
 
