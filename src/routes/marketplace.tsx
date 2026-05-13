@@ -287,8 +287,6 @@ function MarketplacePage() {
             </p>
           </div>
         </section>
-          </div>
-        </section>
       </main>
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
