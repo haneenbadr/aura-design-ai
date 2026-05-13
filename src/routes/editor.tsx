@@ -278,22 +278,18 @@ function Editor() {
         {/* Canvas area */}
         <main className="flex-1 p-4 min-w-0 relative">
           {mode === "2d" ? (
-            <div className="relative h-full w-full">
-              {bgUrl && showBg && (
-                <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">
-                  <img src={bgUrl} alt="تصميم AI" className="size-full object-cover opacity-60" />
-                  <div className="absolute inset-0 bg-card/30" />
+            <div className="relative h-full w-full rounded-2xl overflow-hidden border border-border bg-card grid place-items-center">
+              {bgUrl ? (
+                <img src={bgUrl} alt="تصميم AI" className="size-full object-cover" />
+              ) : (
+                <div className="text-center p-8">
+                  <div className="size-16 mx-auto rounded-2xl bg-secondary grid place-items-center mb-3">
+                    <Image className="size-7 text-muted-foreground" />
+                  </div>
+                  <p className="font-semibold">لا توجد صورة بعد</p>
+                  <p className="text-sm text-muted-foreground mt-1">استخدم المساعد لتوليد تصميم</p>
                 </div>
               )}
-              <div className="relative h-full w-full z-10">
-                <Canvas2D
-                  items={items}
-                  setItems={setItems}
-                  selected={selected}
-                  setSelected={setSelected}
-                  onDropItem={onDropItem}
-                />
-              </div>
             </div>
           ) : (
             <Scene3D ref={scene3dRef} items={items} selected={selected} setSelected={setSelected} />
