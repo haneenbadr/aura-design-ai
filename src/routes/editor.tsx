@@ -3,7 +3,7 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Canvas2D } from "@/components/editor/Canvas2D";
-import { Scene3D } from "@/components/editor/Scene3D";
+import { Scene3D, type Scene3DHandle } from "@/components/editor/Scene3D";
 import { CATEGORIES, FURNITURE, type FurnitureCategory, type PlacedItem } from "@/components/editor/furniture";
 import { AIChat } from "@/components/design/AIChat";
 import {
@@ -87,6 +87,7 @@ function Editor() {
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [showBg, setShowBg] = useState(true);
   const [regenerating, setRegenerating] = useState(false);
+  const scene3dRef = useRef<Scene3DHandle | null>(null);
 
   // Load AI-generated design from previous step
   useEffect(() => {
@@ -193,9 +194,20 @@ function Editor() {
                 <Image className="size-4" />
               </button>
             )}
-            <Button variant="ghost" size="sm">
-              <Download className="size-4" /> تصدير
-            </Button>
+            {mode === "3d" ? (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => scene3dRef.current?.exportPNG(2)} title="تصدير صورة PNG عالية الدقة">
+                  <Download className="size-4" /> PNG
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => scene3dRef.current?.exportGLB()} title="تصدير المشهد كملف GLB">
+                  <Box className="size-4" /> GLB
+                </Button>
+              </>
+            ) : (
+              <Button variant="ghost" size="sm">
+                <Download className="size-4" /> تصدير
+              </Button>
+            )}
             <Button variant="hero" size="sm" onClick={doSave}>
               <Save className="size-4" /> {saved ? "تم الحفظ" : "حفظ"}
             </Button>
@@ -284,7 +296,7 @@ function Editor() {
               </div>
             </div>
           ) : (
-            <Scene3D items={items} selected={selected} setSelected={setSelected} />
+            <Scene3D ref={scene3dRef} items={items} selected={selected} setSelected={setSelected} />
           )}
         </main>
       </div>
