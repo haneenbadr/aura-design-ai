@@ -461,7 +461,7 @@ function DesignCard({ design, onClick }: { design: Design; onClick: () => void }
   );
 }
 
-function EmptyState({ onCreate, hasFilter }: { onCreate: () => void; hasFilter: boolean }) {
+function EmptyState({ hasFilter }: { hasFilter: boolean }) {
   return (
     <div className="glass rounded-3xl p-12 text-center">
       <div className="size-16 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-5">
@@ -474,8 +474,10 @@ function EmptyState({ onCreate, hasFilter }: { onCreate: () => void; hasFilter: 
         {hasFilter ? "جرّب كلمة بحث مختلفة." : "احفظ مشاريع تصميمك هنا واستأنفها وقتما تشاء."}
       </p>
       {!hasFilter && (
-        <Button variant="hero" onClick={onCreate}>
-          <Plus className="size-4" /> تصميم جديد
+        <Button variant="hero" asChild>
+          <Link to="/design">
+            <Plus className="size-4" /> تصميم جديد
+          </Link>
         </Button>
       )}
     </div>
