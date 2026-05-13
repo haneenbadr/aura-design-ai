@@ -12,9 +12,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import {
-  Store, Package, MessageCircle, BarChart3, Plus, Sparkles, ShieldCheck,
+  Store, Package, BarChart3, Plus, Sparkles, ShieldCheck,
   TrendingUp, Eye, Heart, Star, MapPin, Phone, Trash2, Pencil, Upload,
-  CheckCircle2, Clock, Wand2, ArrowLeft,
+  CheckCircle2, Clock, ArrowLeft, MessageCircle, Globe, Save, PhoneCall,
 } from "lucide-react";
 import insp1 from "@/assets/insp-1.jpg";
 import insp2 from "@/assets/insp-2.jpg";
@@ -27,9 +27,9 @@ export const Route = createFileRoute("/vendor")({
   head: () => ({
     meta: [
       { title: "بوابة الموردين — داري" },
-      { name: "description", content: "أدر منتجاتك، استقبل طلبات العملاء، وتابع تحليلات الأداء كمورد على داري." },
+      { name: "description", content: "أدر منتجاتك وبيانات تواصلك العامة وتابع أداء متجرك على داري." },
       { property: "og:title", content: "بوابة الموردين — داري" },
-      { property: "og:description", content: "AI يربطك بعملاء يبحثون عن قطع شبيهة بمنتجاتك." },
+      { property: "og:description", content: "اعرض منتجاتك ودع العملاء يتواصلون معك مباشرة." },
     ],
   }),
   component: VendorPage,
@@ -53,15 +53,15 @@ type Product = {
   matches: number;
 };
 
-type Inquiry = {
-  id: string;
-  customer: string;
-  product: string;
-  message: string;
+type VendorProfile = {
+  storeName: string;
+  ownerName: string;
   city: string;
-  ago: string;
-  status: "جديد" | "قيد الرد" | "تم";
-  match: number;
+  address: string;
+  phone: string;
+  whatsapp: string;
+  website: string;
+  bio: string;
 };
 
 const SEED_PRODUCTS: Product[] = [
@@ -71,18 +71,23 @@ const SEED_PRODUCTS: Product[] = [
   { id: "p4", title: "مكتبة جدارية بخشب البلوط", category: "أثاث", style: "حديث", price: 3100, city: "الرياض", img: insp4, status: "مسودة", views: 0, favs: 0, matches: 0 },
 ];
 
-const SEED_INQUIRIES: Inquiry[] = [
-  { id: "i1", customer: "منى أحمد", product: "سرير خشبي مزدوج بإطار طبيعي", message: "هل متوفّر بمقاس كنج؟ ومتى أقرب توصيل؟", city: "جدة", ago: "قبل ١٠ دقائق", status: "جديد", match: 96 },
-  { id: "i2", customer: "خالد العتيبي", product: "ثريا كريستال متوسطة", message: "أحتاج قطعتين، فيه خصم على الاثنين؟", city: "الرياض", ago: "قبل ساعة", status: "قيد الرد", match: 88 },
-  { id: "i3", customer: "ريم الحربي", product: "مجلس عربي مطرز بألوان دافئة", message: "ممكن صور أكثر للتفاصيل؟", city: "الدمام", ago: "أمس", status: "تم", match: 92 },
-];
+const SEED_PROFILE: VendorProfile = {
+  storeName: "ورشة الخشب",
+  ownerName: "أحمد العبد الله",
+  city: "الرياض",
+  address: "حي الملقا، شارع الأمير محمد بن سلمان، مبنى ١٢",
+  phone: "+966 55 123 4567",
+  whatsapp: "+966 55 123 4567",
+  website: "https://wood-workshop.example",
+  bio: "ورشة متخصصة في الأثاث الخشبي المصنوع يدوياً منذ ٢٠١٢.",
+};
 
 const CATEGORIES: Category[] = ["أثاث", "إضاءة", "سجاد", "ديكور", "مطبخ"];
 const STYLES: Style[] = ["اسكندنافي", "تراثي", "كلاسيكي", "حديث", "بوهيمي"];
 
 function VendorPage() {
   const [products, setProducts] = useState<Product[]>(SEED_PRODUCTS);
-  const [inquiries, setInquiries] = useState<Inquiry[]>(SEED_INQUIRIES);
+  const [profile, setProfile] = useState<VendorProfile>(SEED_PROFILE);
   const [tab, setTab] = useState("overview");
 
   // add product form
@@ -98,15 +103,14 @@ function VendorPage() {
     const totalViews = products.reduce((s, p) => s + p.views, 0);
     const totalFavs = products.reduce((s, p) => s + p.favs, 0);
     const totalMatches = products.reduce((s, p) => s + p.matches, 0);
-    const newInquiries = inquiries.filter((i) => i.status === "جديد").length;
-    return { totalViews, totalFavs, totalMatches, newInquiries, published: products.filter((p) => p.status === "منشور").length };
-  }, [products, inquiries]);
+    const profileViews = Math.round(totalViews * 0.18);
+    return { totalViews, totalFavs, totalMatches, profileViews, published: products.filter((p) => p.status === "منشور").length };
+  }, [products]);
 
   function onPickImage(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    const url = URL.createObjectURL(f);
-    setImgPreview(url);
+    setImgPreview(URL.createObjectURL(f));
   }
 
   function addProduct(e: React.FormEvent) {
@@ -140,9 +144,9 @@ function VendorPage() {
     setProducts((prev) => prev.map((p) => p.id === id ? { ...p, status: p.status === "منشور" ? "مسودة" : "منشور" } : p));
   }
 
-  function replyInquiry(id: string) {
-    setInquiries((prev) => prev.map((i) => i.id === id ? { ...i, status: "قيد الرد" } : i));
-    toast.success("تم فتح المحادثة مع العميل");
+  function saveProfile(e: React.FormEvent) {
+    e.preventDefault();
+    toast.success("تم تحديث بيانات التواصل");
   }
 
   return (
@@ -158,10 +162,10 @@ function VendorPage() {
                 <Store className="size-4" /> بوابة الموردين
               </div>
               <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-                أهلاً، <span className="text-gradient-gold">ورشة الخشب</span>
+                أهلاً، <span className="text-gradient-gold">{profile.storeName}</span>
               </h1>
               <p className="text-muted-foreground text-lg mb-6">
-                أدر منتجاتك، استقبل طلبات العملاء التي يطابقها وكيل الذكاء الاصطناعي مع تصاميمهم، وتابع أداءك في الوقت الحقيقي.
+                اعرض منتجاتك وبياناتك للعملاء، ودع التواصل يتم بينك وبينهم مباشرة عبر الهاتف أو واتساب.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" size="lg" onClick={() => setTab("add")}>
@@ -185,7 +189,7 @@ function VendorPage() {
             <Kpi icon={Eye} label="مشاهدات الشهر" value={stats.totalViews.toLocaleString("ar-EG")} delta="+12%" />
             <Kpi icon={Heart} label="الإعجابات" value={stats.totalFavs.toLocaleString("ar-EG")} delta="+8%" />
             <Kpi icon={Sparkles} label="مطابقات AI" value={stats.totalMatches.toLocaleString("ar-EG")} delta="+24%" gold />
-            <Kpi icon={MessageCircle} label="رسائل جديدة" value={String(stats.newInquiries)} delta={stats.newInquiries > 0 ? "تحتاج رد" : "—"} />
+            <Kpi icon={PhoneCall} label="نقرات تواصل" value={stats.profileViews.toLocaleString("ar-EG")} delta="+15%" />
           </div>
         </section>
 
@@ -195,7 +199,7 @@ function VendorPage() {
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
               <TabsTrigger value="overview"><BarChart3 className="size-4" /> نظرة عامة</TabsTrigger>
               <TabsTrigger value="products"><Package className="size-4" /> منتجاتي</TabsTrigger>
-              <TabsTrigger value="inquiries"><MessageCircle className="size-4" /> الطلبات</TabsTrigger>
+              <TabsTrigger value="contact"><Phone className="size-4" /> بيانات التواصل</TabsTrigger>
               <TabsTrigger value="add"><Plus className="size-4" /> منتج جديد</TabsTrigger>
             </TabsList>
 
@@ -234,16 +238,21 @@ function VendorPage() {
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="size-5 text-accent" />
-                      <h2 className="font-extrabold text-lg">حالة الحساب</h2>
+                      <h2 className="font-extrabold text-lg">الملف العام</h2>
                     </div>
-                    <Row label="الاسم التجاري" value="ورشة الخشب" />
-                    <Row label="المدينة" value="الرياض" />
+                    <Row label="الاسم التجاري" value={profile.storeName} />
+                    <Row label="المسؤول" value={profile.ownerName} />
+                    <Row label="المدينة" value={profile.city} />
+                    <Row label="الهاتف" value={<span dir="ltr">{profile.phone}</span>} />
                     <Row label="عدد المنتجات" value={`${products.length} (${stats.published} منشور)`} />
                     <Row label="التقييم" value={<span className="inline-flex items-center gap-1"><Star className="size-3.5 fill-gold text-gold" /> 4.8</span>} />
                     <div className="rounded-xl bg-accent/10 border border-accent/30 p-3 text-xs text-foreground/80 flex items-start gap-2">
                       <CheckCircle2 className="size-4 text-accent shrink-0 mt-0.5" />
-                      حسابك <strong className="text-foreground">موثّق</strong>. منتجاتك تظهر بشارة الثقة للعملاء.
+                      حسابك <strong className="text-foreground">موثّق</strong>. يظهر للعملاء مع بياناتك للتواصل المباشر.
                     </div>
+                    <Button variant="outline" className="w-full" onClick={() => setTab("contact")}>
+                      <Pencil className="size-4" /> تعديل بيانات التواصل
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -298,50 +307,97 @@ function VendorPage() {
               )}
             </TabsContent>
 
-            {/* Inquiries */}
-            <TabsContent value="inquiries" className="mt-6 space-y-3">
-              {inquiries.map((i) => (
-                <Card key={i.id} className="border-border/60">
-                  <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4">
-                    <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:w-44 shrink-0">
-                      <div className="size-11 rounded-full bg-gradient-wood grid place-items-center text-primary-foreground font-bold">
-                        {i.customer.charAt(0)}
+            {/* Contact info */}
+            <TabsContent value="contact" className="mt-6">
+              <div className="grid lg:grid-cols-3 gap-6">
+                <Card className="lg:col-span-2 border-border/60">
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="mb-6">
+                      <h2 className="font-extrabold text-xl">بيانات التواصل العامة</h2>
+                      <p className="text-sm text-muted-foreground">
+                        تظهر هذه البيانات للعميل في صفحة منتجاتك ليتواصل معك مباشرة. لا توجد رسائل من خلال المنصة.
+                      </p>
+                    </div>
+                    <form onSubmit={saveProfile} className="grid md:grid-cols-2 gap-5">
+                      <div>
+                        <Label htmlFor="store">اسم المتجر / المكان</Label>
+                        <Input id="store" value={profile.storeName} onChange={(e) => setProfile({ ...profile, storeName: e.target.value })} />
                       </div>
                       <div>
-                        <p className="font-bold text-sm">{i.customer}</p>
-                        <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-                          <MapPin className="size-3" /> {i.city}
-                        </p>
+                        <Label htmlFor="owner">اسم المسؤول</Label>
+                        <Input id="owner" value={profile.ownerName} onChange={(e) => setProfile({ ...profile, ownerName: e.target.value })} />
                       </div>
-                    </div>
-
-                    <div className="flex-1 min-w-0 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge className="bg-gradient-gold text-gold-foreground border-0">
-                          <Wand2 className="size-3" /> مطابقة {i.match}%
-                        </Badge>
-                        <Badge variant="secondary">{i.product}</Badge>
-                        <span className="text-[11px] text-muted-foreground ms-auto">{i.ago}</span>
+                      <div>
+                        <Label htmlFor="v-city">المدينة</Label>
+                        <Input id="v-city" value={profile.city} onChange={(e) => setProfile({ ...profile, city: e.target.value })} />
                       </div>
-                      <p className="text-sm text-foreground/80 leading-relaxed">{i.message}</p>
-                      <div className="flex gap-2 pt-1">
-                        <Button
-                          variant={i.status === "تم" ? "outline" : "gold"}
-                          size="sm"
-                          onClick={() => replyInquiry(i.id)}
-                          disabled={i.status === "تم"}
-                        >
-                          <MessageCircle className="size-4" />
-                          {i.status === "تم" ? "تم الرد" : i.status === "قيد الرد" ? "متابعة المحادثة" : "رد على العميل"}
+                      <div>
+                        <Label htmlFor="phone">رقم الهاتف</Label>
+                        <Input id="phone" dir="ltr" value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} placeholder="+966 5X XXX XXXX" />
+                      </div>
+                      <div>
+                        <Label htmlFor="wa">رقم واتساب</Label>
+                        <Input id="wa" dir="ltr" value={profile.whatsapp} onChange={(e) => setProfile({ ...profile, whatsapp: e.target.value })} placeholder="+966 5X XXX XXXX" />
+                      </div>
+                      <div>
+                        <Label htmlFor="web">الموقع الإلكتروني (اختياري)</Label>
+                        <Input id="web" dir="ltr" value={profile.website} onChange={(e) => setProfile({ ...profile, website: e.target.value })} placeholder="https://" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor="addr">العنوان التفصيلي</Label>
+                        <Input id="addr" value={profile.address} onChange={(e) => setProfile({ ...profile, address: e.target.value })} />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor="bio">نبذة عن المتجر</Label>
+                        <Textarea id="bio" rows={3} value={profile.bio} onChange={(e) => setProfile({ ...profile, bio: e.target.value })} />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Button type="submit" variant="hero">
+                          <Save className="size-4" /> حفظ التغييرات
                         </Button>
-                        <Button variant="outline" size="sm">
-                          <Phone className="size-4" /> اتصال
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-border/60 h-fit">
+                  <CardContent className="p-6 space-y-4">
+                    <h3 className="font-extrabold">معاينة بطاقة المتجر</h3>
+                    <p className="text-xs text-muted-foreground">هكذا يراها العميل في صفحة المنتج.</p>
+                    <div className="rounded-2xl border border-border/60 p-4 space-y-3 bg-secondary/30">
+                      <div className="flex items-center gap-3">
+                        <div className="size-12 rounded-xl bg-gradient-wood grid place-items-center text-primary-foreground font-bold text-lg">
+                          {profile.storeName.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-extrabold leading-tight">{profile.storeName}</p>
+                          <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+                            <ShieldCheck className="size-3 text-accent" /> موثّق · {profile.city}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed">{profile.bio}</p>
+                      <div className="space-y-1.5 text-xs">
+                        <p className="flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground" />{profile.address}</p>
+                        <p className="flex items-center gap-2" dir="ltr"><Phone className="size-3.5 text-muted-foreground" />{profile.phone}</p>
+                        {profile.website && (
+                          <p className="flex items-center gap-2" dir="ltr"><Globe className="size-3.5 text-muted-foreground" />{profile.website}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2 pt-1">
+                        <Button asChild variant="hero" size="sm" className="flex-1">
+                          <a href={`tel:${profile.phone.replace(/\s/g, "")}`}><Phone className="size-3.5" /> اتصال</a>
+                        </Button>
+                        <Button asChild variant="outline" size="sm" className="flex-1">
+                          <a href={`https://wa.me/${profile.whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noreferrer">
+                            <MessageCircle className="size-3.5" /> واتساب
+                          </a>
                         </Button>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              </div>
             </TabsContent>
 
             {/* Add product */}
@@ -350,7 +406,7 @@ function VendorPage() {
                 <CardContent className="p-6 sm:p-8">
                   <div className="mb-6">
                     <h2 className="font-extrabold text-xl">أضف منتجاً جديداً</h2>
-                    <p className="text-sm text-muted-foreground">سيقوم AI بمطابقته تلقائياً مع تصاميم العملاء.</p>
+                    <p className="text-sm text-muted-foreground">سيقوم AI بمطابقته تلقائياً مع تصاميم العملاء، ويظهر مع بيانات تواصلك.</p>
                   </div>
 
                   <form onSubmit={addProduct} className="grid md:grid-cols-2 gap-5">
