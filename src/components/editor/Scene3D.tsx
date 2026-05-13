@@ -114,7 +114,7 @@ const Furniture = forwardRef<Group, {
       )}
     </group>
   );
-}
+});
 
 function Room({ w, d }: { w: number; d: number }) {
   const wallH = 2.7;
