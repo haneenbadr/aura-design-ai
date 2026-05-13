@@ -24,7 +24,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4 grid lg:grid-cols-2 gap-12 items-center">
         {/* Copy */}
-        <div className="text-center lg:text-right animate-fade-up">
+        <div className="text-right animate-fade-up">
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6 shadow-soft">
             <span className="size-2 rounded-full bg-gold animate-pulse-glow" />
             <span className="text-xs font-medium">مدعوم بالذكاء الاصطناعي • جديد</span>
@@ -38,11 +38,11 @@ export function Hero() {
             يفهم ذوقك
           </h1>
 
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
             ارفع صورة غرفتك أو شارك إلهامك، ودعنا نعيد تخيلها بتصاميم ثنائية وثلاثية الأبعاد، ثم نربطك بأفضل الموردين القريبين منك.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+          <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
             <Button variant="hero" size="xl" asChild>
               <Link to="/design">
                 <Wand2 className="size-5" />
@@ -58,7 +58,7 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-muted-foreground">
+          <div className="mt-10 flex items-center justify-start gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2 space-x-reverse">
                 {[1, 2, 3, 4].map((i) => (
