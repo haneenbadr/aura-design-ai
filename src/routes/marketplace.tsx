@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   Search, SlidersHorizontal, Heart, Star, Sparkles,
-  ShieldCheck, MapPin, Phone, MessageCircle, Store, Wand2, ArrowLeft,
+  ShieldCheck, MapPin, Phone, MessageCircle, Store, Wand2, ArrowLeft, Globe,
 } from "lucide-react";
 import insp1 from "@/assets/insp-1.jpg";
 import insp2 from "@/assets/insp-2.jpg";
@@ -34,6 +35,10 @@ type Match = {
   productTitle: string;     // اسم المنتج عند المورد
   vendor: string;
   city: string;
+  address: string;
+  phone: string;
+  whatsapp?: string;
+  website?: string;
   rating: number;
   reviews: number;
   category: "أثاث" | "إضاءة" | "سجاد" | "ديكور" | "مطبخ";
@@ -45,14 +50,14 @@ type Match = {
 };
 
 const MATCHES: Match[] = [
-  { id: "m1", productTitle: "سرير خشبي مزدوج بإطار طبيعي", vendor: "ورشة الخشب", city: "الرياض", rating: 4.8, reviews: 124, category: "أثاث", style: "اسكندنافي", match: 96, similarTo: "السرير في غرفة النوم", img: insp1, verified: true },
-  { id: "m2", productTitle: "مجلس عربي مطرز بألوان دافئة", vendor: "بيت التراث", city: "جدة", rating: 4.9, reviews: 87, category: "أثاث", style: "تراثي", match: 92, similarTo: "مجلس الضيوف", img: insp2, verified: true },
-  { id: "m3", productTitle: "ثريا كريستال متوسطة", vendor: "نور للإضاءة", city: "الدمام", rating: 4.7, reviews: 210, category: "إضاءة", style: "كلاسيكي", match: 88, similarTo: "إضاءة الصالة", img: insp3 },
-  { id: "m4", productTitle: "مكتبة جدارية بخشب البلوط", vendor: "بلوط ديزاين", city: "الرياض", rating: 4.6, reviews: 56, category: "أثاث", style: "حديث", match: 94, similarTo: "ركن القراءة", img: insp4, verified: true },
-  { id: "m5", productTitle: "مكتب عمل بسيط بسطح خشبي", vendor: "ميسان", city: "الخبر", rating: 4.5, reviews: 142, category: "أثاث", style: "حديث", match: 90, similarTo: "المكتب المنزلي", img: insp5 },
-  { id: "m6", productTitle: "مرآة جدارية بإطار حجري", vendor: "ستون آرت", city: "جدة", rating: 4.8, reviews: 64, category: "ديكور", style: "كلاسيكي", match: 86, similarTo: "ديكور المدخل", img: insp6 },
-  { id: "m7", productTitle: "سجادة صوف يدوية بألوان ترابية", vendor: "نسيج", city: "الرياض", rating: 4.9, reviews: 198, category: "سجاد", style: "بوهيمي", match: 91, similarTo: "سجادة المعيشة", img: insp2, verified: true },
-  { id: "m8", productTitle: "أباجورة خشبية دافئة", vendor: "نور للإضاءة", city: "الدمام", rating: 4.4, reviews: 76, category: "إضاءة", style: "اسكندنافي", match: 89, similarTo: "إضاءة جانب السرير", img: insp4 },
+  { id: "m1", productTitle: "سرير خشبي مزدوج بإطار طبيعي", vendor: "ورشة الخشب", city: "الرياض", address: "حي العليا، شارع التحلية", phone: "+966 55 123 4567", whatsapp: "+966 55 123 4567", website: "https://workshop-wood.sa", rating: 4.8, reviews: 124, category: "أثاث", style: "اسكندنافي", match: 96, similarTo: "السرير في غرفة النوم", img: insp1, verified: true },
+  { id: "m2", productTitle: "مجلس عربي مطرز بألوان دافئة", vendor: "بيت التراث", city: "جدة", address: "حي الروضة، طريق الأمير سلطان", phone: "+966 56 222 3344", whatsapp: "+966 56 222 3344", rating: 4.9, reviews: 87, category: "أثاث", style: "تراثي", match: 92, similarTo: "مجلس الضيوف", img: insp2, verified: true },
+  { id: "m3", productTitle: "ثريا كريستال متوسطة", vendor: "نور للإضاءة", city: "الدمام", address: "حي الفيصلية، شارع الملك فهد", phone: "+966 53 998 1122", website: "https://noor-light.sa", rating: 4.7, reviews: 210, category: "إضاءة", style: "كلاسيكي", match: 88, similarTo: "إضاءة الصالة", img: insp3 },
+  { id: "m4", productTitle: "مكتبة جدارية بخشب البلوط", vendor: "بلوط ديزاين", city: "الرياض", address: "حي الملقا، طريق الملك سلمان", phone: "+966 50 765 4321", whatsapp: "+966 50 765 4321", rating: 4.6, reviews: 56, category: "أثاث", style: "حديث", match: 94, similarTo: "ركن القراءة", img: insp4, verified: true },
+  { id: "m5", productTitle: "مكتب عمل بسيط بسطح خشبي", vendor: "ميسان", city: "الخبر", address: "حي العقربية، شارع الكورنيش", phone: "+966 54 321 0987", rating: 4.5, reviews: 142, category: "أثاث", style: "حديث", match: 90, similarTo: "المكتب المنزلي", img: insp5 },
+  { id: "m6", productTitle: "مرآة جدارية بإطار حجري", vendor: "ستون آرت", city: "جدة", address: "حي السلامة، شارع فلسطين", phone: "+966 55 444 7788", website: "https://stone-art.sa", rating: 4.8, reviews: 64, category: "ديكور", style: "كلاسيكي", match: 86, similarTo: "ديكور المدخل", img: insp6 },
+  { id: "m7", productTitle: "سجادة صوف يدوية بألوان ترابية", vendor: "نسيج", city: "الرياض", address: "حي الورود، شارع موسى بن نصير", phone: "+966 58 111 2233", whatsapp: "+966 58 111 2233", rating: 4.9, reviews: 198, category: "سجاد", style: "بوهيمي", match: 91, similarTo: "سجادة المعيشة", img: insp2, verified: true },
+  { id: "m8", productTitle: "أباجورة خشبية دافئة", vendor: "نور للإضاءة", city: "الدمام", address: "حي الفيصلية، شارع الملك فهد", phone: "+966 53 998 1122", website: "https://noor-light.sa", rating: 4.4, reviews: 76, category: "إضاءة", style: "اسكندنافي", match: 89, similarTo: "إضاءة جانب السرير", img: insp4 },
 ];
 
 const CATEGORIES = ["الكل", "أثاث", "إضاءة", "سجاد", "ديكور", "مطبخ"] as const;
@@ -69,6 +74,7 @@ function MarketplacePage() {
   const [style, setStyle] = useState<(typeof STYLES)[number]>("كل الأنماط");
   const [sort, setSort] = useState<(typeof SORTS)[number]["v"]>("match");
   const [favs, setFavs] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<Match | null>(null);
 
   const list = useMemo(() => {
     let xs = MATCHES.filter((p) =>
@@ -209,7 +215,14 @@ function MarketplacePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {list.map((p) => (
-                <Card key={p.id} className="overflow-hidden hover-lift group border-border/60 flex flex-col">
+                <Card
+                  key={p.id}
+                  onClick={() => setSelected(p)}
+                  className="overflow-hidden hover-lift group border-border/60 flex flex-col cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(p); } }}
+                >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img src={p.img} alt={p.productTitle} loading="lazy" className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute top-3 right-3 flex flex-col gap-1.5">
@@ -223,14 +236,14 @@ function MarketplacePage() {
                       )}
                     </div>
                     <button
-                      onClick={() => toggleFav(p.id)}
+                      onClick={(e) => { e.stopPropagation(); toggleFav(p.id); }}
                       className="absolute top-3 left-3 size-9 rounded-full glass grid place-items-center hover:bg-card"
                       aria-label="المفضلة"
                     >
                       <Heart className={`size-4 ${favs.has(p.id) ? "fill-destructive text-destructive" : ""}`} />
                     </button>
                   </div>
-                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
+                  <CardContent className="p-4 space-y-3 flex-1 flex flex-col text-right">
                     <div>
                       <div className="inline-flex items-center gap-1 text-[11px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
                         <Sparkles className="size-3" /> شبيه بـ: {p.similarTo}
@@ -253,15 +266,7 @@ function MarketplacePage() {
                       <span className="text-muted-foreground font-normal">({p.reviews} مراجعة)</span>
                     </div>
 
-                    <div className="flex gap-2 mt-auto pt-2">
-                      <Button variant="gold" size="sm" className="flex-1">
-                        <MessageCircle className="size-4" />
-                        تواصل مع المورد
-                      </Button>
-                      <Button variant="outline" size="icon" aria-label="اتصال">
-                        <Phone className="size-4" />
-                      </Button>
-                    </div>
+                    <p className="mt-auto pt-2 text-[11px] text-muted-foreground">اضغط لعرض بيانات المورد</p>
                   </CardContent>
                 </Card>
               ))}
@@ -283,6 +288,81 @@ function MarketplacePage() {
           </div>
         </section>
       </main>
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+        <DialogContent className="sm:max-w-lg text-right" dir="rtl">
+          {selected && (
+            <>
+              <div className="relative aspect-[16/9] -mx-6 -mt-6 mb-4 overflow-hidden">
+                <img src={selected.img} alt={selected.productTitle} className="size-full object-cover" />
+                {selected.verified && (
+                  <Badge variant="secondary" className="absolute top-3 right-3 shadow-soft gap-1">
+                    <ShieldCheck className="size-3" /> مورد موثّق
+                  </Badge>
+                )}
+              </div>
+              <DialogHeader className="text-right">
+                <DialogTitle className="text-right text-xl font-extrabold">{selected.vendor}</DialogTitle>
+                <DialogDescription className="text-right">
+                  المنتج المطابق: <span className="text-foreground font-medium">{selected.productTitle}</span>
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="mt-4 space-y-3 text-sm">
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">المدينة</p>
+                    <p className="font-medium">{selected.city}</p>
+                  </div>
+                  <MapPin className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">العنوان</p>
+                    <p className="font-medium">{selected.address}</p>
+                  </div>
+                  <MapPin className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">رقم الهاتف</p>
+                    <p className="font-medium" dir="ltr">{selected.phone}</p>
+                  </div>
+                  <Phone className="size-4 text-accent shrink-0 mt-1" />
+                </div>
+                {selected.whatsapp && (
+                  <div className="flex items-start gap-3 justify-end">
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">واتساب</p>
+                      <p className="font-medium" dir="ltr">{selected.whatsapp}</p>
+                    </div>
+                    <MessageCircle className="size-4 text-accent shrink-0 mt-1" />
+                  </div>
+                )}
+                {selected.website && (
+                  <div className="flex items-start gap-3 justify-end">
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">الموقع الإلكتروني</p>
+                      <a href={selected.website} target="_blank" rel="noreferrer" className="font-medium text-accent hover:underline" dir="ltr">{selected.website}</a>
+                    </div>
+                    <Globe className="size-4 text-accent shrink-0 mt-1" />
+                  </div>
+                )}
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <span className="text-muted-foreground">({selected.reviews} مراجعة)</span>
+                  <span className="font-semibold">{selected.rating}</span>
+                  <Star className="size-4 fill-gold text-gold" />
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs text-muted-foreground bg-secondary/40 rounded-lg p-3 text-right">
+                التواصل والاتفاق يتمّان مباشرة بينك وبين المورد خارج المنصة.
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <SiteFooter />
     </div>
   );
