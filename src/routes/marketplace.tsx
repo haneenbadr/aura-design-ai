@@ -74,6 +74,7 @@ function MarketplacePage() {
   const [style, setStyle] = useState<(typeof STYLES)[number]>("كل الأنماط");
   const [sort, setSort] = useState<(typeof SORTS)[number]["v"]>("match");
   const [favs, setFavs] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<Match | null>(null);
 
   const list = useMemo(() => {
     let xs = MATCHES.filter((p) =>
