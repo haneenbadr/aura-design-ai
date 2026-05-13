@@ -258,8 +258,10 @@ function DesignsPage() {
                   جميع مشاريعك في مكان واحد. أنشئ تصميماً جديداً، عدّل القديم، أو افتح التفاصيل لاستكمال العمل.
                 </p>
               </div>
-              <Button variant="hero" size="lg" onClick={() => setCreating(true)} className="shrink-0">
-                <Plus className="size-5" /> تصميم جديد
+              <Button variant="hero" size="lg" asChild className="shrink-0">
+                <Link to="/design">
+                  <Plus className="size-5" /> تصميم جديد
+                </Link>
               </Button>
             </div>
           </div>
@@ -290,7 +292,7 @@ function DesignsPage() {
               <Loader2 className="size-8 animate-spin text-muted-foreground" />
             </div>
           ) : list.length === 0 ? (
-            <EmptyState onCreate={() => setCreating(true)} hasFilter={search.length > 0} />
+            <EmptyState hasFilter={search.length > 0} />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {list.map((d) => (
@@ -459,7 +461,7 @@ function DesignCard({ design, onClick }: { design: Design; onClick: () => void }
   );
 }
 
-function EmptyState({ onCreate, hasFilter }: { onCreate: () => void; hasFilter: boolean }) {
+function EmptyState({ hasFilter }: { hasFilter: boolean }) {
   return (
     <div className="glass rounded-3xl p-12 text-center">
       <div className="size-16 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-5">
@@ -472,8 +474,10 @@ function EmptyState({ onCreate, hasFilter }: { onCreate: () => void; hasFilter: 
         {hasFilter ? "جرّب كلمة بحث مختلفة." : "احفظ مشاريع تصميمك هنا واستأنفها وقتما تشاء."}
       </p>
       {!hasFilter && (
-        <Button variant="hero" onClick={onCreate}>
-          <Plus className="size-4" /> تصميم جديد
+        <Button variant="hero" asChild>
+          <Link to="/design">
+            <Plus className="size-4" /> تصميم جديد
+          </Link>
         </Button>
       )}
     </div>

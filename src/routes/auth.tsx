@@ -68,7 +68,7 @@ function AuthPage() {
       return;
     }
     toast.success("أهلاً بعودتك");
-    navigate({ to: "/designs" });
+    navigate({ to: "/" });
   }
 
   async function handleSignup(e: React.FormEvent) {
