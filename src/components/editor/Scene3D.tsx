@@ -188,7 +188,8 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
       const api = sceneApi.current;
       if (!api) return;
       const { gl, scene, camera } = api;
-      const size = gl.getSize({ x: 0, y: 0 } as never as { x: number; y: number });
+      const size = new Vector2();
+      gl.getSize(size);
       const pr = gl.getPixelRatio();
       try {
         gl.setPixelRatio(scale * pr);
