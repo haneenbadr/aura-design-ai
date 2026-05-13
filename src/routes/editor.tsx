@@ -284,21 +284,7 @@ function Editor() {
               </div>
             </div>
           ) : (
-            <div className="h-full w-full rounded-2xl border border-border bg-gradient-hero grid place-items-center relative overflow-hidden">
-              <div className="absolute inset-0 opacity-20" style={{
-                backgroundImage: "linear-gradient(var(--color-primary) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-                transform: "perspective(800px) rotateX(60deg)",
-                transformOrigin: "center bottom",
-              }} />
-              <div className="relative text-center">
-                <div className="size-20 mx-auto rounded-2xl bg-gradient-gold grid place-items-center shadow-glow mb-4 animate-float">
-                  <Box className="size-9 text-gold-foreground" />
-                </div>
-                <p className="font-bold text-lg">العرض ثلاثي الأبعاد</p>
-                <p className="text-sm text-muted-foreground mt-1">قريباً — تجربة Three.js تفاعلية كاملة</p>
-              </div>
-            </div>
+            <Scene3D items={items} selected={selected} setSelected={setSelected} />
           )}
         </main>
       </div>
