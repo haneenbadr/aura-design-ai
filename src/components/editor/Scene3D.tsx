@@ -173,12 +173,16 @@ function ExportBridge({
 }
 
 export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
-  { items, selected, setSelected, roomPxWidth = 760, roomPxHeight = 500 },
+  { items, setItems, selected, setSelected, roomPxWidth = 760, roomPxHeight = 500 },
   ref,
 ) {
   const roomW = useMemo(() => roomPxWidth / PX_PER_M, [roomPxWidth]);
   const roomD = useMemo(() => roomPxHeight / PX_PER_M, [roomPxHeight]);
   const sceneApi = useRef<{ gl: WebGLRenderer; scene: Scene; camera: PerspectiveCamera } | null>(null);
+  const refs = useRef<Map<string, Group>>(new Map());
+  const [transforming, setTransforming] = useState(false);
+  const [mode, setMode] = useState<TransformMode>("translate");
+  const selectedObj = selected ? refs.current.get(selected) : null;
 
   useImperativeHandle(ref, () => ({
     exportPNG: async (scale = 2) => {
@@ -217,13 +221,23 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
     },
   }));
 
+  const commitTransform = () => {
+    if (!selected || !setItems) return;
+    const obj = refs.current.get(selected);
+    if (!obj) return;
+    const newX = (obj.position.x + roomW / 2) * PX_PER_M;
+    const newY = (obj.position.z + roomD / 2) * PX_PER_M;
+    const newRot = (-obj.rotation.y * 180) / Math.PI;
+    setItems(items.map((it) => it.uid === selected ? { ...it, x: newX, y: newY, rotation: newRot } : it));
+  };
+
   return (
     <div className="h-full w-full rounded-2xl overflow-hidden border border-border relative bg-gradient-to-b from-[hsl(35,30%,92%)] to-[hsl(30,25%,82%)]">
       <Canvas
         shadows
         gl={{ preserveDrawingBuffer: true, antialias: true }}
         camera={{ position: [roomW * 0.9, roomW * 0.7, roomD * 0.9], fov: 45 }}
-        onPointerMissed={() => setSelected(null)}
+        onPointerMissed={() => { if (!transforming) setSelected(null); }}
       >
         <Suspense fallback={<Html center><div className="text-xs text-muted-foreground">جاري تحميل المشهد...</div></Html>}>
           <ExportBridge registerHandle={(h) => { sceneApi.current = h; }} />
@@ -242,6 +256,10 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
           {items.map((it) => (
             <Furniture
               key={it.uid}
+              ref={(g) => {
+                if (g) refs.current.set(it.uid, g);
+                else refs.current.delete(it.uid);
+              }}
               item={it}
               isSelected={selected === it.uid}
               onSelect={() => setSelected(it.uid)}
@@ -249,9 +267,23 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
               roomD={roomD}
             />
           ))}
+          {selectedObj && setItems && (
+            <TransformControls
+              object={selectedObj}
+              mode={mode}
+              showY={mode === "rotate"}
+              translationSnap={0.1}
+              rotationSnap={Math.PI / 24}
+              onMouseDown={() => setTransforming(true)}
+              onMouseUp={() => { setTransforming(false); commitTransform(); }}
+              onObjectChange={() => { /* live update on release */ }}
+            />
+          )}
           <ContactShadows position={[0, 0.01, 0]} opacity={0.35} scale={Math.max(roomW, roomD) * 1.5} blur={2.4} far={3} />
           <Environment preset="apartment" />
           <OrbitControls
+            makeDefault
+            enabled={!transforming}
             target={[0, 0.8, 0]}
             maxPolarAngle={Math.PI / 2 - 0.05}
             minDistance={3}
@@ -260,8 +292,27 @@ export const Scene3D = forwardRef<Scene3DHandle, Props>(function Scene3D(
           />
         </Suspense>
       </Canvas>
+
+      {/* Transform mode switcher */}
+      {selected && setItems && (
+        <div className="absolute top-3 right-3 glass rounded-xl p-1 flex gap-1 shadow-soft">
+          <button
+            onClick={() => setMode("translate")}
+            className={`px-3 h-8 rounded-lg text-xs font-semibold ${mode === "translate" ? "bg-card shadow-soft" : "text-muted-foreground"}`}
+          >
+            تحريك
+          </button>
+          <button
+            onClick={() => setMode("rotate")}
+            className={`px-3 h-8 rounded-lg text-xs font-semibold ${mode === "rotate" ? "bg-card shadow-soft" : "text-muted-foreground"}`}
+          >
+            تدوير
+          </button>
+        </div>
+      )}
+
       <div className="absolute top-3 left-3 glass rounded-lg px-3 py-1.5 text-[11px] text-muted-foreground pointer-events-none">
-        اسحب للتدوير • مرر للتكبير • انقر قطعة للتحديد
+        اسحب للتدوير • مرر للتكبير • انقر قطعة لتحريكها
       </div>
     </div>
   );
