@@ -1,6 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState, useEffect } from "react";
 import { z } from "zod";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Canvas2D } from "@/components/editor/Canvas2D";
 import { Scene3D, type Scene3DHandle } from "@/components/editor/Scene3D";
@@ -123,7 +125,7 @@ function Editor() {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  const doSave = () => { setSaved(true); setTimeout(() => setSaved(false), 1600); };
+  const navigate = useNavigate();
 
   const styleLabel: Record<string, string> = {
     modern: "حديث", classic: "كلاسيكي عربي", minimal: "بسيط",
@@ -131,6 +133,31 @@ function Editor() {
   };
   const roomLabel: Record<string, string> = {
     living: "غرفة معيشة", bedroom: "غرفة نوم", kitchen: "مطبخ", office: "مكتب", bath: "حمام",
+  };
+
+  const doSave = async () => {
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) {
+      toast.error("سجّل الدخول أولاً لحفظ التصميم");
+      navigate({ to: "/auth" });
+      return;
+    }
+    const name = `${roomLabel[room ?? ""] ?? "تصميم"} • ${styleLabel[style ?? ""] ?? "AI"}`;
+    const { error } = await supabase.from("designs").insert({
+      user_id: auth.user.id,
+      name,
+      room_type: room ?? "living_room",
+      style: style ?? "modern",
+      thumbnail_url: bgUrl,
+      status: "draft",
+    });
+    if (error) {
+      toast.error("تعذّر الحفظ: " + error.message);
+      return;
+    }
+    setSaved(true);
+    toast.success("تم حفظ التصميم في تصاميمي");
+    setTimeout(() => setSaved(false), 1600);
   };
 
   return (
