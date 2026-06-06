@@ -4,8 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Readex Pro - Arabic-first typography */
-@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap");
+/* Readex Pro font is loaded via <link> in src/routes/__root.tsx */
 
 /* ============================================================
    DESIGN SYSTEM — DARI AI Interior Design
