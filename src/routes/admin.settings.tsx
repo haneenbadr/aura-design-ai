@@ -15,8 +15,8 @@ function SettingsPage() {
     <div className="space-y-5">
       <PageHeader title="الإعدادات" description="إدارة تفضيلات المنصة" />
 
-      <Tabs defaultValue="general">
-        <TabsList>
+      <Tabs defaultValue="general" dir="rtl">
+        <TabsList dir="rtl">
           <TabsTrigger value="general">عام</TabsTrigger>
           <TabsTrigger value="notify">الإشعارات</TabsTrigger>
           <TabsTrigger value="platform">المنصة</TabsTrigger>
@@ -37,7 +37,7 @@ function SettingsPage() {
               </div>
             </CardContent>
           </Card>
-          <div className="flex justify-end"><Button className="bg-gradient-wood">حفظ التغييرات</Button></div>
+          <div className="flex justify-start"><Button className="bg-gradient-wood">حفظ التغييرات</Button></div>
         </TabsContent>
 
         <TabsContent value="notify" className="mt-4 space-y-4">
