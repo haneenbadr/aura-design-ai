@@ -43,6 +43,8 @@ const groups = [
   },
 ];
 
+type Item = { title: string; url: string; icon: typeof Users; exact?: boolean };
+
 export function AdminSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const isActive = (url: string, exact?: boolean) =>
@@ -67,7 +69,7 @@ export function AdminSidebar() {
             <SidebarGroupLabel>{g.label}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {g.items.map((item) => (
+                {(g.items as Item[]).map((item) => (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton asChild isActive={isActive(item.url, item.exact)} tooltip={item.title}>
                       <Link to={item.url}>
