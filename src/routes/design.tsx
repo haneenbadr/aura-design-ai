@@ -79,6 +79,7 @@ function DesignWizard() {
     if (step === 4) {
       setGenerating(true);
       setError(null);
+      toast("🎨 بدأت في تجهيز تصميمك…", { duration: 2500 });
       // محاكاة توليد التصميم — اربط backend هنا
       await new Promise((r) => setTimeout(r, 1200));
       const imageUrl = "https://picsum.photos/seed/dari-design/1024/640";
@@ -88,6 +89,8 @@ function DesignWizard() {
       setDone(true);
       return;
     }
+    const msg = ENCOURAGEMENTS[Math.min(step, ENCOURAGEMENTS.length - 1)];
+    toast(msg, { duration: 2000 });
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   };
   const back = () => setStep((s) => Math.max(s - 1, 0));
