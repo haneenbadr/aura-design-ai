@@ -265,14 +265,25 @@ function DesignWizard() {
                 <div className="relative">
                   <textarea
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="مثال: غرفة معيشة مريحة لعائلة من ٤، تفضّل الألوان الترابية مع لمسة من الأزرق..."
+                    onChange={(e) => {
+                      const v = e.target.value.slice(0, PROMPT_MAX);
+                      setPrompt(v);
+                      const el = e.target;
+                      el.style.height = "auto";
+                      el.style.height = Math.min(el.scrollHeight, 320) + "px";
+                    }}
+                    placeholder="اوصف لنا الجو الذي تتخيله… مثلاً: أحب الألوان الترابية مع لمسة أزرق هادئ، إضاءة دافئة، خامات خشبية، ونباتات صغيرة في الأركان."
                     rows={4}
-                    className="w-full rounded-2xl border border-input bg-background p-4 pl-12 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 transition-shadow"
+                    maxLength={PROMPT_MAX}
+                    className="w-full rounded-2xl border border-input bg-background p-4 pl-12 pb-10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all leading-relaxed"
+                    style={{ minHeight: "7rem" }}
                   />
                   <button className="absolute bottom-3 left-3 size-9 rounded-xl bg-secondary hover:bg-gold/20 grid place-items-center transition-colors">
                     <Mic className="size-4" />
                   </button>
+                  <span className={`absolute bottom-4 right-4 text-[11px] tabular-nums transition-colors ${prompt.length > PROMPT_MAX * 0.9 ? "text-gold font-semibold" : "text-muted-foreground"}`}>
+                    {prompt.length.toLocaleString("ar-EG")} / {PROMPT_MAX.toLocaleString("ar-EG")}
+                  </span>
                 </div>
 
                 <div>
