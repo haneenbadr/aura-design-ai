@@ -328,6 +328,60 @@ function DesignWizard() {
                     <span>اقتصادي</span><span>متوسط</span><span>فاخر</span>
                   </div>
                 </div>
+
+                {/* Room dimensions — 3D only, not sent to AI */}
+                <div className="mt-4 rounded-3xl border border-border/70 bg-gradient-to-br from-secondary/40 via-card to-background p-5 md:p-6">
+                  <div className="flex items-start gap-4 flex-wrap">
+                    <div className="shrink-0 w-24 h-24 rounded-2xl bg-background/70 border border-border/60 grid place-items-center shadow-soft">
+                      <svg viewBox="0 0 80 80" className="w-16 h-16" aria-hidden>
+                        <defs>
+                          <linearGradient id="floor" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stopColor="oklch(0.86 0.06 75)" />
+                            <stop offset="100%" stopColor="oklch(0.72 0.09 75)" />
+                          </linearGradient>
+                        </defs>
+                        <polygon points="14,52 66,52 74,66 6,66" fill="url(#floor)" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                        <polygon points="14,52 14,20 66,20 66,52" fill="none" stroke="oklch(0.55 0.08 75)" strokeWidth="1.2" strokeDasharray="2 2" />
+                        <polygon points="14,20 6,10 74,10 66,20" fill="none" stroke="oklch(0.55 0.08 75)" strokeWidth="1" opacity="0.6" />
+                        <line x1="14" y1="52" x2="6" y2="66" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                        <line x1="66" y1="52" x2="74" y2="66" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-base font-bold">أبعاد الغرفة</h3>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/15 text-accent-foreground border border-accent/20 font-semibold">للعرض ثلاثي الأبعاد فقط</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        هذه القياسات لن تُستخدم في توليد الصورة، وإنما لبناء نموذج الغرفة داخل بيئة العرض ثلاثية الأبعاد.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 mt-5">
+                    {[
+                      { key: "length", label: "الطول" },
+                      { key: "width", label: "العرض" },
+                      { key: "height", label: "الارتفاع" },
+                    ].map((f) => (
+                      <div key={f.key}>
+                        <label className="block text-[11px] font-semibold text-muted-foreground mb-1.5">{f.label}</label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            min={0}
+                            step="0.1"
+                            value={dims[f.key as keyof typeof dims]}
+                            onChange={(e) => setDims((d) => ({ ...d, [f.key]: e.target.value }))}
+                            placeholder="0"
+                            className="w-full rounded-xl border border-input bg-background/80 px-3 py-2.5 pl-11 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                          />
+                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-muted-foreground bg-secondary/60 px-1.5 py-0.5 rounded-md">متر</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
 
