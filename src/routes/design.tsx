@@ -58,20 +58,25 @@ const PROMPT_CHIPS = [
 function DesignWizard() {
   const [step, setStep] = useState(0);
   const [room, setRoom] = useState<string>("");
+  const [customRoom, setCustomRoom] = useState<string>("");
   const [files, setFiles] = useState<{ url: string; name: string }[]>([]);
   const [style, setStyle] = useState<string>("");
+  const [customStyle, setCustomStyle] = useState<string>("");
   const [budget, setBudget] = useState(50);
   const [prompt, setPrompt] = useState("");
   const [chips, setChips] = useState<string[]>([]);
+  const [dims, setDims] = useState({ length: "", width: "", height: "" });
   const [generating, setGenerating] = useState(false);
   const [done, setDone] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const PROMPT_MAX = 500;
+
   const canNext =
-    (step === 0 && room) ||
+    (step === 0 && (room || customRoom.trim())) ||
     (step === 1) || // skip allowed
-    (step === 2 && style) ||
+    (step === 2 && (style || customStyle.trim())) ||
     (step === 3) ||
     step === 4;
 
