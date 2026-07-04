@@ -158,9 +158,14 @@ function DesignWizard() {
 
             {step === 1 && (
               <div className="animate-fade-up">
+                <AssistantCard>
+                  <p>📷 إذا كان لديك صورة للغرفة، يمكنك رفعها هنا.</p>
+                  <p className="text-muted-foreground">الصورة تساعدني على فهم شكل الغرفة والإضاءة وتوزيع الأثاث الحالي.</p>
+                  <p className="text-muted-foreground">ولو ما عندكش صورة، تقدر تكمل عادي.</p>
+                </AssistantCard>
                 <h2 className="text-2xl font-bold mb-2">ارفع صور غرفتك أو إلهامك</h2>
                 <p className="text-muted-foreground mb-6">
-                  يمكنك تخطّي هذه الخطوة والبدء من الصفر
+                  خطوة اختيارية — يمكنك تخطّيها والبدء من الصفر
                 </p>
                 <UploadZone files={files} onChange={setFiles} />
               </div>
