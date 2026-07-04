@@ -396,10 +396,17 @@ function DesignWizard() {
                 <p className="text-muted-foreground mb-6">تحقق من اختياراتك قبل التوليد</p>
 
                 <div className="grid sm:grid-cols-2 gap-3 mb-8">
-                  <SummaryRow label="نوع الغرفة" value={ROOM_TYPES.find(r => r.id === room)?.label || "—"} />
-                  <SummaryRow label="الأسلوب" value={STYLES.find(s => s.id === style)?.label || "—"} />
+                  <SummaryRow label="نوع الغرفة" value={ROOM_TYPES.find(r => r.id === room)?.label || customRoom.trim() || "—"} />
+                  <SummaryRow label="الأسلوب" value={STYLES.find(s => s.id === style)?.label || customStyle.trim() || "—"} />
                   <SummaryRow label="الصور المرفوعة" value={files.length ? `${files.length.toLocaleString("ar-EG")} صورة` : "بدون"} />
                   <SummaryRow label="الميزانية" value={`${(budget * 100).toLocaleString("ar-EG")} ريال`} />
+                  {(dims.length || dims.width || dims.height) && (
+                    <SummaryRow
+                      label="أبعاد الغرفة (٣D)"
+                      value={`${dims.length || "?"} × ${dims.width || "?"} × ${dims.height || "?"} م`}
+                      full
+                    />
+                  )}
                   {chips.length > 0 && (
                     <SummaryRow label="التفضيلات" value={chips.join("، ")} full />
                   )}
