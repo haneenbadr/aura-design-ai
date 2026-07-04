@@ -112,7 +112,7 @@ function DesignWizard() {
             <h1 className="text-3xl md:text-4xl font-extrabold">
               لنصمم <span className="text-gradient-gold">غرفتك</span> معاً
             </h1>
-            <p className="mt-2 text-muted-foreground">٥ خطوات سريعة لإنتاج تصميمك المخصص</p>
+            <p className="mt-2 text-muted-foreground">مصممك الذكي بيرشدك خطوة بخطوة — بدون تعقيد</p>
           </div>
 
           {/* Progress */}
