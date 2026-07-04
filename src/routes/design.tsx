@@ -214,6 +214,10 @@ function DesignWizard() {
 
             {step === 3 && (
               <div className="animate-fade-up space-y-8">
+                <AssistantCard>
+                  <p>✨ أخبرني بأي تفاصيل إضافية تهمك.</p>
+                  <p className="text-muted-foreground">كلما كانت التفاصيل أوضح، استطعت إنشاء تصميم أقرب لما تتخيله. يمكنك مثلاً ذكر: الألوان المفضلة، نوع الأرضيات، الإضاءة، نوع الأثاث، أو أي لمسات خاصة.</p>
+                </AssistantCard>
                 <div>
                   <h2 className="text-2xl font-bold mb-2">أخبرنا أكثر</h2>
                   <p className="text-muted-foreground mb-6">تفاصيل تساعد الذكاء الاصطناعي على فهمك</p>
