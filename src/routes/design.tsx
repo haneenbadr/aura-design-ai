@@ -283,6 +283,11 @@ function DesignWizard() {
 
             {step === 4 && !done && (
               <div className="animate-fade-up">
+                <AssistantCard>
+                  <p>ممتاز ✨</p>
+                  <p>راجعت كل المعلومات التي أدخلتها.</p>
+                  <p className="text-muted-foreground">إذا كان كل شيء صحيحًا، اضغط على «ولّد التصميم» وسأبدأ في تجهيز التصميم المناسب لك.</p>
+                </AssistantCard>
                 <h2 className="text-2xl font-bold mb-2">مراجعة وتأكيد</h2>
                 <p className="text-muted-foreground mb-6">تحقق من اختياراتك قبل التوليد</p>
 
