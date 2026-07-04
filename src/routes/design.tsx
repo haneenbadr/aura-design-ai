@@ -173,6 +173,10 @@ function DesignWizard() {
 
             {step === 2 && (
               <div className="animate-fade-up">
+                <AssistantCard>
+                  <p>🎨 الآن لنحدد أسلوب التصميم.</p>
+                  <p className="text-muted-foreground">اختر النمط الذي يعبر عن ذوقك، أو تابع واذكر أسلوباً خاصاً في خطوة التفاصيل إذا كنت تبحث عن شيء مختلف.</p>
+                </AssistantCard>
                 <h2 className="text-2xl font-bold mb-2">ما الأسلوب الذي يناسبك؟</h2>
                 <p className="text-muted-foreground mb-6">اختر الأسلوب الأقرب إلى ذوقك</p>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
