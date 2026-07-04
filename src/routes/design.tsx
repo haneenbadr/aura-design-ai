@@ -158,6 +158,23 @@ function DesignWizard() {
                     );
                   })}
                 </div>
+
+                {/* Custom room type */}
+                <div className="mt-6 rounded-2xl border border-dashed border-border/70 bg-secondary/30 p-4">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-2">
+                    لم تجد نوع الغرفة؟ اكتب نوعاً مخصصاً
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={customRoom}
+                      onChange={(e) => { setCustomRoom(e.target.value); if (e.target.value.trim()) setRoom(""); }}
+                      placeholder="مثلاً: غرفة ألعاب، ستوديو، مقهى، مطعم…"
+                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-shadow"
+                    />
+                    <Sparkles className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gold/70 pointer-events-none" />
+                  </div>
+                </div>
               </div>
             )}
 
