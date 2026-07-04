@@ -58,20 +58,25 @@ const PROMPT_CHIPS = [
 function DesignWizard() {
   const [step, setStep] = useState(0);
   const [room, setRoom] = useState<string>("");
+  const [customRoom, setCustomRoom] = useState<string>("");
   const [files, setFiles] = useState<{ url: string; name: string }[]>([]);
   const [style, setStyle] = useState<string>("");
+  const [customStyle, setCustomStyle] = useState<string>("");
   const [budget, setBudget] = useState(50);
   const [prompt, setPrompt] = useState("");
   const [chips, setChips] = useState<string[]>([]);
+  const [dims, setDims] = useState({ length: "", width: "", height: "" });
   const [generating, setGenerating] = useState(false);
   const [done, setDone] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const PROMPT_MAX = 500;
+
   const canNext =
-    (step === 0 && room) ||
+    (step === 0 && (room || customRoom.trim())) ||
     (step === 1) || // skip allowed
-    (step === 2 && style) ||
+    (step === 2 && (style || customStyle.trim())) ||
     (step === 3) ||
     step === 4;
 
@@ -153,6 +158,23 @@ function DesignWizard() {
                     );
                   })}
                 </div>
+
+                {/* Custom room type */}
+                <div className="mt-6 rounded-2xl border border-dashed border-border/70 bg-secondary/30 p-4">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-2">
+                    لم تجد نوع الغرفة؟ اكتب نوعاً مخصصاً
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={customRoom}
+                      onChange={(e) => { setCustomRoom(e.target.value); if (e.target.value.trim()) setRoom(""); }}
+                      placeholder="مثلاً: غرفة ألعاب، ستوديو، مقهى، مطعم…"
+                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-shadow"
+                    />
+                    <Sparkles className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gold/70 pointer-events-none" />
+                  </div>
+                </div>
               </div>
             )}
 
@@ -209,6 +231,23 @@ function DesignWizard() {
                     );
                   })}
                 </div>
+
+                {/* Custom style */}
+                <div className="mt-6 rounded-2xl border border-dashed border-border/70 bg-secondary/30 p-4">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-2">
+                    تبحث عن أسلوب مختلف؟ اكتبه بكلماتك
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={customStyle}
+                      onChange={(e) => { setCustomStyle(e.target.value); if (e.target.value.trim()) setStyle(""); }}
+                      placeholder="مثلاً: Japandi، Bohemian، Art Deco، Minimal Luxury…"
+                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-shadow"
+                    />
+                    <Sparkles className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gold/70 pointer-events-none" />
+                  </div>
+                </div>
               </div>
             )}
 
@@ -226,14 +265,25 @@ function DesignWizard() {
                 <div className="relative">
                   <textarea
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="مثال: غرفة معيشة مريحة لعائلة من ٤، تفضّل الألوان الترابية مع لمسة من الأزرق..."
+                    onChange={(e) => {
+                      const v = e.target.value.slice(0, PROMPT_MAX);
+                      setPrompt(v);
+                      const el = e.target;
+                      el.style.height = "auto";
+                      el.style.height = Math.min(el.scrollHeight, 320) + "px";
+                    }}
+                    placeholder="اوصف لنا الجو الذي تتخيله… مثلاً: أحب الألوان الترابية مع لمسة أزرق هادئ، إضاءة دافئة، خامات خشبية، ونباتات صغيرة في الأركان."
                     rows={4}
-                    className="w-full rounded-2xl border border-input bg-background p-4 pl-12 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 transition-shadow"
+                    maxLength={PROMPT_MAX}
+                    className="w-full rounded-2xl border border-input bg-background p-4 pl-12 pb-10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all leading-relaxed"
+                    style={{ minHeight: "7rem" }}
                   />
                   <button className="absolute bottom-3 left-3 size-9 rounded-xl bg-secondary hover:bg-gold/20 grid place-items-center transition-colors">
                     <Mic className="size-4" />
                   </button>
+                  <span className={`absolute bottom-4 right-4 text-[11px] tabular-nums transition-colors ${prompt.length > PROMPT_MAX * 0.9 ? "text-gold font-semibold" : "text-muted-foreground"}`}>
+                    {prompt.length.toLocaleString("ar-EG")} / {PROMPT_MAX.toLocaleString("ar-EG")}
+                  </span>
                 </div>
 
                 <div>
@@ -278,6 +328,60 @@ function DesignWizard() {
                     <span>اقتصادي</span><span>متوسط</span><span>فاخر</span>
                   </div>
                 </div>
+
+                {/* Room dimensions — 3D only, not sent to AI */}
+                <div className="mt-4 rounded-3xl border border-border/70 bg-gradient-to-br from-secondary/40 via-card to-background p-5 md:p-6">
+                  <div className="flex items-start gap-4 flex-wrap">
+                    <div className="shrink-0 w-24 h-24 rounded-2xl bg-background/70 border border-border/60 grid place-items-center shadow-soft">
+                      <svg viewBox="0 0 80 80" className="w-16 h-16" aria-hidden>
+                        <defs>
+                          <linearGradient id="floor" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stopColor="oklch(0.86 0.06 75)" />
+                            <stop offset="100%" stopColor="oklch(0.72 0.09 75)" />
+                          </linearGradient>
+                        </defs>
+                        <polygon points="14,52 66,52 74,66 6,66" fill="url(#floor)" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                        <polygon points="14,52 14,20 66,20 66,52" fill="none" stroke="oklch(0.55 0.08 75)" strokeWidth="1.2" strokeDasharray="2 2" />
+                        <polygon points="14,20 6,10 74,10 66,20" fill="none" stroke="oklch(0.55 0.08 75)" strokeWidth="1" opacity="0.6" />
+                        <line x1="14" y1="52" x2="6" y2="66" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                        <line x1="66" y1="52" x2="74" y2="66" stroke="oklch(0.55 0.08 75)" strokeWidth="1" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-base font-bold">أبعاد الغرفة</h3>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/15 text-accent-foreground border border-accent/20 font-semibold">للعرض ثلاثي الأبعاد فقط</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        هذه القياسات لن تُستخدم في توليد الصورة، وإنما لبناء نموذج الغرفة داخل بيئة العرض ثلاثية الأبعاد.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 mt-5">
+                    {[
+                      { key: "length", label: "الطول" },
+                      { key: "width", label: "العرض" },
+                      { key: "height", label: "الارتفاع" },
+                    ].map((f) => (
+                      <div key={f.key}>
+                        <label className="block text-[11px] font-semibold text-muted-foreground mb-1.5">{f.label}</label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            min={0}
+                            step="0.1"
+                            value={dims[f.key as keyof typeof dims]}
+                            onChange={(e) => setDims((d) => ({ ...d, [f.key]: e.target.value }))}
+                            placeholder="0"
+                            className="w-full rounded-xl border border-input bg-background/80 px-3 py-2.5 pl-11 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                          />
+                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-muted-foreground bg-secondary/60 px-1.5 py-0.5 rounded-md">متر</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -292,10 +396,17 @@ function DesignWizard() {
                 <p className="text-muted-foreground mb-6">تحقق من اختياراتك قبل التوليد</p>
 
                 <div className="grid sm:grid-cols-2 gap-3 mb-8">
-                  <SummaryRow label="نوع الغرفة" value={ROOM_TYPES.find(r => r.id === room)?.label || "—"} />
-                  <SummaryRow label="الأسلوب" value={STYLES.find(s => s.id === style)?.label || "—"} />
+                  <SummaryRow label="نوع الغرفة" value={ROOM_TYPES.find(r => r.id === room)?.label || customRoom.trim() || "—"} />
+                  <SummaryRow label="الأسلوب" value={STYLES.find(s => s.id === style)?.label || customStyle.trim() || "—"} />
                   <SummaryRow label="الصور المرفوعة" value={files.length ? `${files.length.toLocaleString("ar-EG")} صورة` : "بدون"} />
                   <SummaryRow label="الميزانية" value={`${(budget * 100).toLocaleString("ar-EG")} ريال`} />
+                  {(dims.length || dims.width || dims.height) && (
+                    <SummaryRow
+                      label="أبعاد الغرفة (٣D)"
+                      value={`${dims.length || "?"} × ${dims.width || "?"} × ${dims.height || "?"} م`}
+                      full
+                    />
+                  )}
                   {chips.length > 0 && (
                     <SummaryRow label="التفضيلات" value={chips.join("، ")} full />
                   )}

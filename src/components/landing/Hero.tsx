@@ -101,19 +101,19 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Free vs Pro pill */}
-          <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-12 glass rounded-2xl shadow-soft p-3 hidden md:flex flex-col gap-2 animate-float">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="size-2 rounded-full bg-accent" />
-              <span className="font-medium">مجاني</span>
+          {/* Free vs Pro — compact single pill */}
+          <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-10 glass rounded-full shadow-soft px-3 py-1.5 hidden md:flex items-center gap-3 animate-float text-[11px]">
+            <span className="flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-accent" />
+              <span className="font-semibold">مجاني</span>
               <span className="text-muted-foreground">٥ تصاميم</span>
-            </div>
-            <div className="h-px bg-border" />
-            <div className="flex items-center gap-2 text-xs">
-              <span className="size-2 rounded-full bg-gold" />
-              <span className="font-medium">برو</span>
+            </span>
+            <span className="w-px h-3 bg-border" />
+            <span className="flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-gold" />
+              <span className="font-semibold">برو</span>
               <span className="text-muted-foreground">غير محدود</span>
-            </div>
+            </span>
           </div>
         </div>
       </div>
