@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/design/StepIndicator";
 import { UploadZone } from "@/components/design/UploadZone";
+import { AssistantCard } from "@/components/design/AssistantCard";
 import {
   ArrowRight, ArrowLeft, Sparkles, Wand2, Send, Mic,
   Bed, Sofa, ChefHat, Briefcase, Bath, Loader2, Check, AlertCircle,
 } from "lucide-react";
+
+const ENCOURAGEMENTS = [
+  "✅ اختيار موفق!",
+  "✅ رائع، لنكمل.",
+  "✅ ممتاز، أصبحت لدي صورة أوضح عن التصميم الذي تريده.",
+  "✅ هذا سيساعدني في إنشاء تصميم أدق.",
+  "✨ خطوة أخرى ونقترب من تصميمك.",
+];
 
 export const Route = createFileRoute("/design")({
   head: () => ({
