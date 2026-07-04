@@ -124,8 +124,13 @@ function DesignWizard() {
           <div className="bg-card rounded-3xl shadow-elegant border border-border/60 p-6 md:p-10">
             {step === 0 && (
               <div className="animate-fade-up">
+                <AssistantCard>
+                  <p>👋 أهلاً بك!</p>
+                  <p>لنبدأ بتحديد نوع الغرفة التي تريد تصميمها.</p>
+                  <p className="text-muted-foreground">اختيار نوع الغرفة يساعدني على فهم المساحة بشكل أفضل واقتراح تصميم يناسب احتياجاتك.</p>
+                </AssistantCard>
                 <h2 className="text-2xl font-bold mb-2">ما نوع المساحة التي تصممها؟</h2>
-                <p className="text-muted-foreground mb-6">اختر نوع الغرفة لتخصيص الاقتراحات</p>
+                <p className="text-muted-foreground mb-6">اختر نوع الغرفة، وإذا لم تجد المناسب يمكنك المتابعة وإضافة التفاصيل لاحقًا</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                   {ROOM_TYPES.map((r) => {
                     const active = room === r.id;
